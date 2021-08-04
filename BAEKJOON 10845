@@ -1,0 +1,73 @@
+import java.util.Scanner;
+
+class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Scanner in = new Scanner(System.in);
+		int n = in.nextInt();       //배열 크기를 지정
+		int rear = -1, front = -1;  // rear = 삽입 일어나는 곳, front = 삭제 일어나는 곳
+		int [] a = new int[n];     // 배열 선언
+		
+		for (int i = 0; i< n;i++) {
+			String input = in.next();  // 명령어 입력
+			switch (input) {
+			case "push": { 
+				rear++;
+				a[rear] = in.nextInt();
+				break;
+			}
+			
+			case "pop": {
+				if(rear == front) {
+					System.out.println("-1");
+				}
+				else {
+					front++;
+					System.out.println(a[front]);
+				}
+				break;
+			}
+			
+			case "size": {
+				System.out.println(rear-front);
+				break;
+			}
+			
+			case "empty": {
+				if (rear == front) {
+					System.out.println("1");
+				}
+				else {
+					System.out.println("0");
+				}
+				break;
+			}
+			
+			case "front": {
+				if(rear == front) {
+					System.out.println("-1");
+				}
+				else {
+					System.out.println(a[front+1]);
+				}
+				break;
+			}
+			
+			case "back":{
+				if(rear == front) {
+					System.out.println("-1");
+				}
+				else {
+					System.out.println(a[rear]);
+				}
+				break;
+			}
+			
+			default:
+				System.out.println("똑바로 입력 하세용");
+			}
+		} 
+	}
+}
