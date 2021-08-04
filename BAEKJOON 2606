@@ -1,0 +1,46 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static StringTokenizer st;
+	static int arr[][];
+	static int visit[];
+	static int count = 0;
+	static Queue<Integer> q = new LinkedList<>();
+	
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int N = Integer.parseInt(br.readLine());
+		int M = Integer.parseInt(br.readLine());
+		
+		arr = new int[N+1][N+1];
+		visit = new int[N+1];
+		
+		for(int i=1; i<=M; i++) {//인접 행렬 생성 
+			st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken()), b = Integer.parseInt(st.nextToken());
+			arr[a][b] = arr[b][a] = 1;
+		}
+		
+		visit[1] = 1; //시작 정점은 1이므로 이미 방문한것으로 침
+		hi(1,N);
+		
+		System.out.println(count);
+		br.close();
+	}
+	
+	public static void hi(int N,int M) {
+		for(int i=1; i<=M; i++){
+			if(arr[N][i]==1&&visit[i]!=1) { //두 정점이 연결되어 있고, 방문하지 않을 경우 실행
+				visit[i]=1; //방문한 것으로 표시
+				count++;
+				q.offer(i); //큐에 삽입
+			}
+		}
+		if(q.isEmpty()!=true) { //큐가 안비었으면 실행
+			hi(q.poll(),M);
+		}
+	}
+}
