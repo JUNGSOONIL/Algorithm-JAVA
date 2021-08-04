@@ -1,0 +1,28 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static StringTokenizer st;
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int []arr = new int[M+1];
+		
+		arr[0]=arr[1]=1; // 0 1 은 소수가 아님
+		for(int i=2; i*i<=M;i++) { 
+			if(arr[i]==0) {
+				for(int j=i*i; j<=M;j+=i) {
+					arr[j]=1;
+				}
+			}
+		}
+		for(int i=N;i<=M;i++) {
+			if(arr[i]==0)
+				System.out.println(i);
+		}
+	}
+}
