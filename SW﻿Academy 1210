@@ -1,0 +1,61 @@
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Solution {
+   public static void main(String[] args) throws Exception {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      int[] dx = { -1, 1, 0 };
+      int[] dy = { 0, 0, -1 };
+      int[][] arr = new int[100][100];
+      int sx = 0, sy = 0, ans = 0, index = 0;
+      for (int t = 1; t <= 10; t++) {
+         br.readLine();
+         for (int i = 0; i < 100; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < 100; j++) {
+               arr[i][j] = Integer.parseInt(st.nextToken());
+            }
+         }
+         sy = 99;
+         for (int i = 0; i < 100; i++) {
+            if (arr[99][i] == 2) {
+               sx = i;
+               break;
+            }
+         }
+         index = 2;
+         while (true) {
+            if (index == 2) {
+               for (int i = 0; i < 3; i++) {
+                  int x = sx + dx[i];
+                  int y = sy + dy[i];
+
+                  if (x >= 0 && y >= 0 && x < 100 && arr[y][x] == 1) {
+                     sx = x;
+                     sy = y;
+                     index = i;
+                     break;
+                  }
+               }
+            } else if (index == 0 || index == 1) {
+               int y = sy + dy[2];
+               int x = sx + dx[2];
+
+               if (x >= 0 && y >= 0 && x < 100 && arr[y][x] == 1) {
+                  sx = x;
+                  sy = y;
+                  index = 2;
+               } else {
+                  sx = sx + dx[index];
+                  sy = sy + dy[index];
+               }
+            }
+            if (sy == 0) {
+               ans = sx;
+               break;
+            }
+         }
+         System.out.println("#" + t + " " + ans);
+      }
+   }
+}
