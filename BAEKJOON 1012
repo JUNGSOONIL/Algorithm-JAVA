@@ -1,0 +1,56 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static StringTokenizer st;
+	static int arr[][];
+	static int visit[][];
+	static int[] x = { -1, 0, 1, 0 };
+	static int[] y = { 0, 1, 0, -1 };
+	static int M = 0, N = 0, K = 0, count = 0;
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		int T = Integer.parseInt(br.readLine());
+
+		for (int i = 0; i < T; i++) {
+			st = new StringTokenizer(br.readLine());
+			M = Integer.parseInt(st.nextToken()); // 가로 길이
+			N = Integer.parseInt(st.nextToken()); // 세로 길이
+			K = Integer.parseInt(st.nextToken()); // 배추 위치의 수
+			arr = new int[N][M]; // 세로 길이 = 행, 가로 길이 = 열 이므로 순서를 바꿔 크기를 할당해 준다.
+			visit = new int[N][M]; // 세로 길이 = 행, 가로 길이 = 열 이므로 순서를 바꿔 크기를 할당해 준다.
+			for (int j = 0; j < K; j++) {
+				st = new StringTokenizer(br.readLine());
+				int a = Integer.parseInt(st.nextToken()), b = Integer.parseInt(st.nextToken()); 
+				arr[b][a] = 1; // 입력 값을 보면 행과 열 위치가 바껴 입력되는것을 볼수있다.
+			}
+			for (int j = 0; j < N; j++) {
+				for (int k = 0; k < M; k++) {
+					if (arr[j][k] == 1 && visit[j][k] != 1) { // arr 값이 1이고 방문하지 않았으면 DFS실행
+						count++;
+						hi(j, k);
+					}
+				}
+			}
+			System.out.println(count);
+			count = 0;
+		}
+		br.close();
+	}
+
+	static void hi(int j, int k) {
+		visit[j][k] = 1; //해당 위치를 방문한것으로 표시
+		for (int i = 0; i < 4; i++) { // 해당 배열 위치 기준 상 하 좌 우 확인
+			int jj = j + x[i];
+			int kk = k + y[i];
+
+			if (jj >= 0 && kk >= 0 && jj < N && kk < M) {
+				if (arr[jj][kk] == 1 && visit[jj][kk] != 1) // arr 값이 1이고 방문하지 않았으면 DFS실행
+					hi(jj, kk);
+			}
+		}
+	}
+}
