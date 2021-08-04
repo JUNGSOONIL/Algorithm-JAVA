@@ -1,0 +1,56 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+
+public class Main {
+
+	static int [][]arr = new int[1000][1000]; //인접행렬을 만들 2차원 배열 생성
+	static int []visit = new int[1000]; // 방문 여부를 확인하기 위한 배열 생성
+	static Queue<Integer> q=new LinkedList<>(); // BFS에서 큐를 사용하기 위해 객체 선언
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+			
+		Scanner in = new Scanner(System.in);
+		
+		int N = in.nextInt(); //정점의 개수
+		int M = in.nextInt(); //간선의 개수
+		int V = in.nextInt(); //시작 정점 번호
+		
+		for(int i=0; i<M;i++) { // 시작 정점과 도착 정점을 입력하면  인접행렬을 만듬
+			int a = in.nextInt(); 
+			int b = in.nextInt(); 
+			arr[a-1][b-1] = arr[b-1][a-1] = 1;
+		}
+		
+		DFS(V,N);
+		System.out.println();
+		BFS(V,N);
+	}
+	
+	public static void DFS(int v, int n) {
+		visit[v-1] = 1; //배열은 0부터 시작이다 보니 해당 정점에서 -1 한 위치를 방문했다고 입력
+		System.out.print(v+" "); //방문한 정점 출력
+
+		for(int i=0; i<n; i++) { //간선 개수만큼 반복
+			if(arr[v-1][i]==1&&visit[i]!=1){ // arr[v-1][i]에 간선이 있고 visit[i]가 방문하지 않았으면 실행 ( visit[v-1]은 현재 방문한 상태 ) 
+				DFS(i+1,n); // 재귀 함수를 이용해 방문하지 않고 간선이 있는곳 방문
+			}
+		}
+	}	
+	public static void BFS(int v, int n) {
+		 q.offer(v); // 큐에 방문한 정점을 삽입한다
+		 visit[v-1]=2; // 해당 정점을 방문했다고 표시 DFS는 1로 BFS는 2로
+		 while(!q.isEmpty()) { //큐가 빌떄까지 반복
+			 int rear=(int)q.poll(); //real에 큐에서 빼낸 정점 저장
+			 System.out.print(rear+" "); //해당 정점을 출력
+			 for(int i=0;i<n;i++) { 
+				 if(arr[rear-1][i]==1&&visit[i]!=2) { //arr[rear-1][i]에 간선이 있고 visit[i]가 방문하지 않았으면 실행
+					 visit[i]=2; //해당 정점을 방문했다고 표시하고
+					 q.offer(i+1); //큐에 해당 정점을 삽입
+					 }
+				 }
+			 }  
+	}
+}
