@@ -1,0 +1,23 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner in = new Scanner(System.in);
+		
+		int n = in.nextInt();
+		d(n);
+	}
+	
+	public static void d(int n) {
+		int m = 1; // 변수 m에 방마다 최대 숫자를 저장해서 비교하기 위해 시작 방인 1로 초기화
+		 
+		for(int i = 0 ; i < n;i++) {
+			m += i * 6; // 방마다 최대 숫자를 저장
+			if (n-m <= 0) {
+				System.out.println(i+1);
+				break;
+			}
+		}
+	}
+}
