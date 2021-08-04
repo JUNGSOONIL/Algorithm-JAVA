@@ -1,0 +1,105 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static StringTokenizer st;
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
+		st = new StringTokenizer( br.readLine() );
+		
+		int n = Integer.parseInt(st.nextToken());
+		int rear = -1; // 현재 배열 위치
+		int a[] = new int[n]; // 배열 선언해서 해당 배열에 입력값 저장
+		for(int i = 0 ; i < n ; i++) {
+			st = new StringTokenizer( br.readLine() );
+			String input = st.nextToken();
+			
+			switch (input) {
+			
+			case "push_front": {
+				rear++;
+				for(int j = rear; j > 0; j--) { // 배열 값을 하나씩 뒤로 미룸
+					a[j] = a[j-1];
+				}
+				a[0] = Integer.parseInt(st.nextToken());
+				break;
+			}
+			
+			case "push_back": {
+				rear++;
+				a[rear] = Integer.parseInt(st.nextToken());
+				break;
+			}
+			
+			case "pop_front": {
+				if(rear == -1) {
+					System.out.println("-1");
+				}
+				else {
+					int pop = a[0];
+					for (int j =0; j< rear; j++) { // 배열 값을 하나싹 앞으로 당김
+						a[j] = a[j+1];
+					}
+					rear--;
+					System.out.println(pop);
+				}
+				break;
+			}
+			
+			case "pop_back": {
+				if(rear == -1) {
+					System.out.println("-1");
+				}
+				else {
+					System.out.println(a[rear]);
+					rear--;
+				}
+				break;
+			}
+			
+			case "size": {
+				if(rear == -1) {
+					System.out.println("0");
+				}
+				else {
+					System.out.println(rear+1);
+				}
+				break;
+			}
+			
+			case "empty": {
+				if(rear == -1) {
+					System.out.println("1");
+				}
+				else {
+					System.out.println("0");
+				}
+				break;
+			}
+			
+			case "front": {
+				if(rear == -1) {
+					System.out.println("-1");
+				}
+				else {
+					System.out.println(a[0]);
+				}
+				break;
+			}
+			
+			case "back":{
+				if(rear == -1) {
+					System.out.println("-1");
+				}
+				else {
+					System.out.println(a[rear]);
+				}
+				break;
+			}
+		}
+		
+		}
+	}
+}
