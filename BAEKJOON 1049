@@ -1,0 +1,34 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static StringTokenizer st;
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int J6[] = new int[M];
+		int J1[] = new int[M];
+		int min = 0;
+		for(int i=0;i<M;i++) {
+			st = new StringTokenizer(br.readLine());
+			J6[i] = Integer.parseInt(st.nextToken());
+			J1[i] = Integer.parseInt(st.nextToken());
+		}
+		Arrays.sort(J6);
+		Arrays.sort(J1);
+		
+		if(N<=6) {
+			min = Math.min(J6[0], J1[0]*N);
+		}
+		else {
+			min = Math.min(N%6==0?J6[0]*(N/6):J6[0]*((N/6)+1), J1[0]*N);
+			min = Math.min(min,J6[0]*(N/6) + J1[0]*(N%6));
+		}
+			
+		System.out.println(min);
+	}
+}
