@@ -1,0 +1,32 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static StringTokenizer st;
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		int N = Integer.parseInt(br.readLine());
+		long[] A = new long[N-1], B = new long[N]; //long을 사용해야 해당 크기를 감당 가능
+		long total = 0;
+		
+		st = new StringTokenizer(br.readLine());
+		for(int i=0; i<N-1; i++) {
+			A[i] = Long.parseLong(st.nextToken());
+		}
+		st = new StringTokenizer(br.readLine());
+		for(int i=0; i<N; i++) {
+			B[i] = Long.parseLong(st.nextToken());
+		}
+		
+		for(int i =0; i < N-1; i++) {
+			if(B[i] < B[i+1])   //다음 마을의 기름 가격이 크면 이전 마을 기름 가격을 입력해줌
+				B[i+1] = B[i];
+			total += A[i]*B[i]; //이후 계산해서 더해준다.
+		}
+		System.out.println(total);
+		br.close();
+	}
+}
