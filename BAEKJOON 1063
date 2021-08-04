@@ -1,0 +1,151 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static StringTokenizer st;
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		st = new StringTokenizer(br.readLine());
+
+		String King = st.nextToken(), Stone = st.nextToken();
+		int N = Integer.parseInt(st.nextToken());
+		// 킹과 돌의 위치를 입력받으면 해당 데이터를 반으로 쪼개서 배열의 좌표와 같도록 데이터를 변환시켜준다. 
+        //이떄 앞뒤의 순서를 바꿔줌
+		int a = (Integer.parseInt(King.substring(1)) - 8) * -1;
+		int b = (int) (King.substring(0, 1).charAt(0)) - 65;
+		int c = (Integer.parseInt(Stone.substring(1)) - 8) * -1;
+		int d = (int) (Stone.substring(0, 1).charAt(0)) - 65;
+
+		for (int i = 0; i < N; i++) {
+			String input = br.readLine();
+			switch (input) {
+			case "R": { // 킹 오른쪽에 돌이 있고 돌이 경계선 부분에 있지 않은 경우
+				if (b + 1 == d && a == c && d < 7) { 
+					b++;
+					d++;
+				} else { // 킹 오른쪽에 돌이 있거나 킹이 경계선에 있는 경우
+					if ((b + 1 == d && a == c) || b == 7) 
+						break;
+					else
+						b++;
+				}
+				break;
+			}
+			case "L": { // 킹 왼쪽에 돌이 있고 돌이 경계선 부분에 있지 않은 경우
+				if (b - 1 == d && a == c && d > 0) {
+					b--;
+					d--;
+				} else { // 킹 왼쪽에 돌이 있거나 킹이 경계선에 있는 경우
+					if ((b - 1 == d && a == c) || b == 0)
+						break;
+					else
+						b--;
+				}
+				break;
+			}
+			case "B": { // 킹 아래 돌이 있고 돌이 경계선 부분에 있지 않은 경우
+				if (a + 1 == c && b == d && c < 7) {
+					a++;
+					c++;
+				} else { // 킹 아래 돌이 있거나 킹이 경계선에 있는 경우
+					if ((a + 1 == c && b == d) || a == 7)
+						break;
+					else
+						a++;
+				}
+				break;
+			}
+			case "T": { // 킹 위에 돌이 있고 돌이 경계선 부분에 있지 않은 경우
+				if (a - 1 == c && b == d && c > 0) {
+					a--;
+					c--;
+				} else { // 킹 위에 돌이 있거나 킹이 경계선에 있는 경우
+					if ((a - 1 == c && b == d) || a == 0)
+						break;
+					else
+						a--;
+				}
+				break;
+			}
+			case "RT": { // 킹 대각선 오른쪽 위에 돌이 있고 돌이 경계선 부분에 있지 않은 경우
+				if (a - 1 == c && b + 1 == d && c > 0 && d < 7) {
+					a--;
+					b++;
+					c--;
+					d++;
+				} else { // 킹 대각선 오른쪽 위에 돌이 있거나 킹이 경계선에 있는 경우
+					if ((a - 1 == c && b + 1 == d) || a == 0 || b == 7) {
+						break;
+					} else {
+						a--;
+						b++;
+					}
+				}
+				break;
+			}
+			case "LT": { // 킹 대각선 왼쪽 위에 돌이 있고 돌이 경계선 부분에 있지 않은 경우
+				if (a - 1 == c && b - 1 == d && c > 0 && d > 0) {
+					a--;
+					b--;
+					c--;
+					d--;
+				} else { // 킹 대각선 왼쪽 위에 돌이 있거나 킹이 경계선에 있는 경우
+					if ((a - 1 == c && b - 1 == d) || a == 0 || b == 0) {
+						break;
+					} else {
+						a--;
+						b--;
+					}
+				}
+				break;
+			}
+			case "RB": { // 킹 대각선 오른쪽 아래에 돌이 있고 돌이 경계선 부분에 있지 않은 경우
+				if (a + 1 == c && b + 1 == d && c < 7 && d < 7) {
+					a++;
+					b++;
+					c++;
+					d++;
+				} else { // 킹 대각선 오른쪽 아래 돌이 있거나 킹이 경계선에 있는 경우
+					if ((a + 1 == c && b + 1 == d) || a == 7 || b == 7) { 
+						break;
+					} else {
+						a++;
+						b++;
+					}
+				}
+				break;
+			}
+			case "LB": { // 킹 대각선 왼족 아래에 돌이 있고 돌이 경계선 부분에 있지 않은 경우
+				if (a + 1 == c && b - 1 == d && c < 7 && d > 0) {
+					a++;
+					b--;
+					c++;
+					d--;
+				}
+
+				else { // 킹 대각선 왼쪽 아래에 돌이 있거나 킹이 경계선에 있는 경우
+					if ((a + 1 == c && b - 1 == d) || a == 7 || b == 0) {
+						break;
+					} else {
+						a++;
+						b--;
+					}
+				}
+				break;
+			}
+			}
+		}
+		// 처음에 변환했던 킹과 돌의 위치를 다시 원래 데이터 형식으로 바꿔줌
+		a = a * -1 + 8; 
+		b = b + 65;
+		c = c * -1 + 8;
+		d = d + 65;
+		// 처음에 데이터 앞뒤 순서를 바꿔저장했으므로 출력 순서도 바꿔서 출력
+		System.out.println((char) b + "" + a);
+		System.out.print((char) d + "" + c);
+		br.close();
+	}
+}
