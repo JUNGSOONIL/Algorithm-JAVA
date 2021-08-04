@@ -1,0 +1,31 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static StringTokenizer st;
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		int X = Integer.parseInt(br.readLine());
+		int N = 64, count = 1, sum = 0;
+		
+		while(true) {
+			if(X < N+sum) { //가진 막대의 합이 X보다 클경우 막대를 나누어준다.
+				N /= 2;
+			}
+			else if (X > N+sum) { //가진 막대의 합이 X보다 작을 경우 막대를 더하고 남은 막대는 나누어준다. 
+				sum += N;
+				N /= 2;
+				count++;
+			} 
+			else { //원하는 크기의 막대를 찾으면 반복문을 종료한다.
+				break;
+			}	
+		}
+		System.out.println(count);
+		br.close();
+	}
+}
