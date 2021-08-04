@@ -1,0 +1,80 @@
+package test;
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static StringTokenizer st;
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String input = br.readLine();
+		st = new StringTokenizer(input);
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int arr[][] = new int[N][M], arr0[][] = new int[8][8], arr1[][] = new int[8][8];
+		int count0 = 0, count1 = 0, count = 64;
+
+        // 입력받은 전체 판 데이터를 블랙은 0 화이트는 1로 변경해 저장 한다.
+		for (int i = 0; i < N; i++) {
+			input = br.readLine();
+			for (int j = 0; j < M; j++) {
+				if (input.substring(j, j + 1).equals("B")) {
+					arr[i][j] = 1;
+				} else {
+					arr[i][j] = 0;
+				}
+			}
+		}
+
+		// 왼쪽위가 흰색인 버전과 검은색인 버전의 2가지 비교 데이터를 만들어 둔다.
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (i % 2 == 0) {
+					if (j % 2 == 0) {
+						arr0[i][j] = 0;
+						arr1[i][j] = 1;
+					} else {
+						arr0[i][j] = 1;
+						arr1[i][j] = 0;
+					}
+				} else {
+					if (j % 2 == 0) {
+						arr0[i][j] = 1;
+						arr1[i][j] = 0;
+					} else {
+						arr0[i][j] = 0;
+						arr1[i][j] = 1;
+					}
+				}
+			}
+		}
+
+		// for문을 이용해 입력받은 전체 판으로 부터 미리 만들어둔 데이터와 비교를 한다
+		// 4중 포문을 이용해 시작위치를 알려준다.
+		for (int i = 0; i < N - 7; i++) {
+			for (int j = 0; j < M - 7; j++) {
+				for (int k = 0; k < 8; k++) {
+					for (int z = 0; z < 8; z++) {
+						if (arr[k + i][z + j] != arr0[k][z])
+							count0++;
+						if (arr[k + i][z + j] != arr1[k][z])
+							count1++;
+					}
+				}
+				if (count0 <= count1 && count0 <= count)
+					count = count0;
+				else if (count1 <= count0 && count1 <= count) {
+					count = count1;
+				}
+				count0 = count1 = 0;
+			}
+		}
+
+		System.out.println(count);
+
+		br.close();
+	}
+}
