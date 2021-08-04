@@ -1,0 +1,76 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static StringTokenizer st;
+	static int sw[];
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		
+		int N = Integer.parseInt(br.readLine()), check = 0, number = 0, count = 0;
+		sw = new int[N+1];
+		st = new StringTokenizer(br.readLine());
+		
+		for(int i = 1; i <= N; i++) 
+			sw[i] = Integer.parseInt(st.nextToken());
+		
+		int M = Integer.parseInt(br.readLine());
+		
+		for(int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			check = Integer.parseInt(st.nextToken());
+			number = Integer.parseInt(st.nextToken());
+			if (check == 1) { // 남학생
+				for(int j = 1; j <= N; j++) {
+					if(j%number == 0) { //받은 숫자의 배수이면 해당 자리를 넘김
+						change(j);
+					}
+				}
+			}
+			else { //여학생
+				if(number > N/2) { //받은 숫자가 배열 중간위치보다 뒤인 경우
+					for(int j = 1; j <= N-number; j++) {
+						if(sw[number-j] == sw[number+j])
+							count++;
+						else
+							break;
+					}
+				}
+				else { //받은 숫자가 배열 중간위치보다 앞이거나 같은 경우
+					for(int j = 1; j <= number-1; j++) {
+						if(sw[number-j] == sw[number+j])
+							count++;
+						else
+							break;
+					}
+				}
+				for(int j = 0; j <= count; j++) { // count 한만큼 돌면서 데이터를 바꿔줌
+					if (j == 0) 
+						change(number);
+					else {
+						change(number+j);
+						change(number-j);
+					}
+				}
+				count = 0;
+			}
+		}
+		for(int j=1; j < N+1; j++) {
+			if(j%20==0) {
+				System.out.print(sw[j]);
+				System.out.println();
+			}
+			else
+				System.out.print(sw[j]+" ");
+		}
+		br.close();
+	}
+	public static void change(int a) {
+		if(sw[a] == 0) 
+			sw[a] = 1;
+		else
+			sw[a] = 0;
+	}
+}
