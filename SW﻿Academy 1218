@@ -1,0 +1,31 @@
+import java.io.*;
+import java.util.Stack;
+
+public class Solution {
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		for (int t = 1; t <=10; t++) {
+			Stack<Character> s = new Stack<Character>();
+			int N = Integer.parseInt(br.readLine());
+			String str = br.readLine();
+			
+			for (int i = 0; i < N; i++) {
+				if (str.charAt(i) == '}'&&s.peek() == '{'){
+					s.pop();
+				}else if(str.charAt(i) == ')' && s.peek() == '(') {
+					s.pop();
+				}else if(str.charAt(i) == '>' && s.peek() == '<') {
+					s.pop();
+				}else if(str.charAt(i) == ']' && s.peek() == '[') {
+					s.pop();
+				}else
+					s.push(str.charAt(i));
+			}
+			if(s.isEmpty())
+				System.out.println("#"+t+" 1");
+			else
+				System.out.println("#"+t+" 0");
+		}
+	}
+}
