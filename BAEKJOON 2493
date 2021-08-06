@@ -1,0 +1,39 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		int N = Integer.parseInt(br.readLine());
+		Stack<Integer> s1 = new Stack<>();
+		Stack<Integer> s2 = new Stack<>();
+
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		for (int i = 1; i <=N; i++) {
+			int M = Integer.parseInt(st.nextToken());
+			if (s1.isEmpty()) {
+				s1.push(M);
+				s2.push(i);
+				System.out.print("0 ");
+			} else {
+				while (!s1.isEmpty()) {
+					if (s1.peek() > M) {
+						
+						System.out.print(s2.peek()+" ");
+						break;
+					}
+					s1.pop();
+					s2.pop();
+				}
+				if (s1.isEmpty()) {
+					System.out.print("0 ");
+					s2.push(i);
+				}
+				s1.push(M);
+				s2.push(i);
+			}
+		}
+	}
+}
