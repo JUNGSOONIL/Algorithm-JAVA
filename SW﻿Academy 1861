@@ -61,7 +61,6 @@ public class Solution{
 				continue;
 			}
 			if (map[i][j] + 1 == map[ny][nx]) {
-				// System.out.println(i+","+j+","+ny+","+nx);
 				count++;
 				ok(ny, nx);
 			}
