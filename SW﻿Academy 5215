@@ -1,0 +1,50 @@
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Solution {
+	static int[] TASTE, CAL;
+	static boolean[] SELECT;
+	static int N, L, SUMTASTE, SUMCAL, MAX;
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int T = Integer.parseInt(br.readLine());
+		for (int t = 1; t <= T; t++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			MAX = 0;
+			N = Integer.parseInt(st.nextToken());
+			L = Integer.parseInt(st.nextToken());
+			
+			TASTE = new int[N];
+			CAL = new int[N];
+			SELECT = new boolean[N];
+			for (int i = 0; i < N; i++) {
+				st = new StringTokenizer(br.readLine());
+				TASTE[i] = Integer.parseInt(st.nextToken());;
+				CAL[i] = Integer.parseInt(st.nextToken());
+			}
+			check(0);
+			System.out.println("#"+t+" "+MAX);
+		}
+	}
+	
+	private static void check(int index) {
+		if(index == N) {
+			SUMTASTE = 0; SUMCAL = 0;
+			for (int i = 0; i < N; i++) {
+				if(SELECT[i]) {
+					SUMTASTE += TASTE[i];
+					SUMCAL += CAL[i];
+				}	
+			}
+			if(SUMCAL <= L) {
+				MAX = Math.max(SUMTASTE, MAX);
+			}
+		}else {
+			SELECT[index] = true;
+			check(index+1);
+			SELECT[index] = false;
+			check(index+1);
+		}
+	}
+}
