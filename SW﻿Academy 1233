@@ -1,0 +1,31 @@
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Solution {
+
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		for (int t = 1; t <=10; t++) {
+			int ans = 1;
+			int N = Integer.parseInt(br.readLine());
+			
+			for (int i = 1; i <= N; i++) {
+				String str = br.readLine();
+				StringTokenizer st = new StringTokenizer(str);
+				st.nextToken();
+				String node = st.nextToken();
+				if(node.equals("+") || node.equals("-") || node.equals("*") || node.equals("/")) {
+					if(str.length()<7) {
+						ans = 0;
+					}
+				}else {
+					if(str.length()>=7) {
+						ans = 0;
+					}
+				}
+			}
+			System.out.println("#"+t+" "+ans);
+		}
+	}
+}
