@@ -11,16 +11,15 @@ public class Solution {
 			int N = Integer.parseInt(br.readLine());
 			
 			for (int i = 1; i <= N; i++) {
-				String str = br.readLine();
-				StringTokenizer st = new StringTokenizer(str);
-				st.nextToken();
+				StringTokenizer st = new StringTokenizer(br.readLine());
+				int number = Integer.parseInt(st.nextToken());
 				String node = st.nextToken();
 				if(node.equals("+") || node.equals("-") || node.equals("*") || node.equals("/")) {
-					if(str.length()<7) {
+					if(number*2 > N) {
 						ans = 0;
 					}
 				}else {
-					if(str.length()>=7) {
+					if( number*2 <= N ) {
 						ans = 0;
 					}
 				}
