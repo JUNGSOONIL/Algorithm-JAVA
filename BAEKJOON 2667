@@ -1,58 +1,53 @@
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
 
 public class Main {
-	static StringTokenizer st;
-	static int arr[][];
-	static int visit[][];
-	static int co[];
-	static int[] x = { -1, 0, 1, 0 };
-	static int[] y = { 0, 1, 0, -1 };
+	static int[][] arr, map;
+	static int[] dy = { 0, 1, 0, -1 };
+	static int[] dx = { -1, 0, 1, 0 };
+	static int [] c;
 	static int N, count;
 
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
 		N = Integer.parseInt(br.readLine());
 		arr = new int[N][N];
-		visit = new int[N][N];
-		co = new int[N * N];
+		map = new int[N][N];
+		c = new int[N*N];
 		for (int i = 0; i < N; i++) {
 			String str = br.readLine();
 			for (int j = 0; j < N; j++) {
-				arr[i][j] = str.charAt(j) - '0'; //문자 0,1을 숫자 0,1로 바꾸어 주기위해 -'0'을 해준다
+				arr[i][j] = str.charAt(j) - '0';
 			}
 		}
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				if (arr[i][j] == 1 && visit[i][j] == 0) { //집이 있고 해당 집을 방문하지 않았으면 DFS 실행
+				if (arr[i][j] == 1 && map[i][j] != 1) {
 					count++;
 					DFS(i, j);
 				}
 			}
 		}
 		System.out.println(count);
-
-		Arrays.sort(co); //co 배열을 정렬해줌
-		for (int i = 0; i < co.length; i++) {
-			if(co[i]!=0) //데이터가 입력된곳만 출력해줌
-				System.out.println(co[i]);
+		Arrays.sort(c);
+		for (int i = 0; i < c.length; i++) {
+			if(c[i]!=0)
+				System.out.println(c[i]);
 		}
-
-		br.close();
 	}
 
-	static void DFS(int a, int b) {
-		visit[a][b] = 1; //해당 번지를 방문한것으로 표시
-		co[count]++; //해당 단지의 집 수를 카운트해줌
+	static void DFS(int y, int x) {
+		map[y][x] = 1;
+		c[count]++;
 		for (int i = 0; i < 4; i++) {
-			int xx = a + x[i];
-			int yy = b + y[i];
-			if (xx >= 0 && yy >= 0 && xx < N && yy < N) {
-				if (arr[xx][yy] == 1 && visit[xx][yy] == 0)
-					DFS(xx, yy);
+			int ny = y + dy[i];
+			int nx = x + dx[i];
+			if (ny < 0 || nx < 0 || ny >= N || nx >= N || arr[ny][nx] != 1 || map[ny][nx] == 1) {
+				ny = y - dy[i];
+				nx = x - dx[i];
+				continue;
 			}
+			DFS(ny,nx);
 		}
 	}
 }
