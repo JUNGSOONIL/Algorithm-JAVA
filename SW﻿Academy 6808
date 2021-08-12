@@ -1,0 +1,65 @@
+import java.io.*;
+import java.util.*;
+ 
+public class Solution {
+    static int[] qu = new int[9], in = new int[qu.length], output = new int[qu.length];
+    static boolean[] select = new boolean[18];
+    static int T, COUNT, qusum, insum;
+ 
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+ 
+        T = Integer.parseInt(br.readLine());
+ 
+        for (int t = 1; t <= T; t++) {
+            select = new boolean[select.length];
+            COUNT = 0;
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for (int i = 0; i < qu.length; i++) {
+                int N = Integer.parseInt(st.nextToken());
+                qu[i] = N;
+                select[N-1] = true;
+ 
+            }
+ 
+            for (int i = 0; i <select.length; i++) {
+                if(COUNT == 9)
+                    break;
+                if (!select[i]) {
+                    in[COUNT++] = i+1;
+                }
+            }
+            COUNT = 0;
+            select = new boolean[select.length];
+            comb(0);
+            System.out.print("#"+t+" "+COUNT+" "+(362880-COUNT));
+            System.out.println();
+        }
+    }
+ 
+    private static void comb(int index) {
+        if (index == qu.length) {
+            for (int i = 0; i <qu.length; i++) {
+                if (qu[i] > output[i]) {
+                    qusum = qusum + qu[i] + output[i];
+                } else {
+                    insum = insum + qu[i] + output[i];
+                }
+            }
+            if (qusum > insum)
+                COUNT++;
+            qusum = 0;
+            insum = 0;
+            return;
+        }
+        for (int i = 0; i <qu.length; i++) {
+            if (select[in[i]-1])
+                continue;
+ 
+            output[index] = in[i];
+            select[in[i]-1] = true;
+            comb(index + 1);
+            select[in[i]-1] = false;
+        }
+    }
+}
