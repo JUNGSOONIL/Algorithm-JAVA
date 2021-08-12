@@ -1,0 +1,49 @@
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		int index = 0;
+
+		int T = Integer.parseInt(br.readLine());
+		int N;
+		for (int i = 0; i < T; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			switch (st.nextToken()) {
+			case "add":
+				N = Integer.parseInt(st.nextToken());
+				index = index | 1 << N;
+				break;
+			case "remove":
+				N = Integer.parseInt(st.nextToken());
+				index = index & ~(1 << N);
+				break;
+			case "check":
+				N = Integer.parseInt(st.nextToken());
+				sb.append((index & 1 << N) != 0 ? 1 + "\n" : 0 + "\n");
+				break;
+			case "toggle":
+				N = Integer.parseInt(st.nextToken());
+				if ((index & 1 << N) != 0)
+					index = index & ~(1 << N);
+				else
+					index = index | 1 << N;
+				break;
+			case "all":
+				for (int j = 1; j <= 20; j++) {
+					index = index | 1 << j;
+				}
+				break;
+			case "empty":
+				for (int j = 1; j <= 20; j++) {
+					index = index & 1 << j;
+				}
+				break;
+			}
+		}
+		System.out.println(sb.toString());
+	}
+}
