@@ -1,0 +1,41 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+	static int[][] in, out;
+	static int T, ans = Integer.MAX_VALUE, S = 1, R;
+	static boolean[] select;
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		T = Integer.parseInt(br.readLine());
+		in = new int[T][2];
+		select = new boolean[T];
+		for (int i = 0; i < T; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+
+			for (int j = 0; j < 2; j++) {
+				int N = Integer.parseInt(st.nextToken());
+				in[i][j] = N;
+			}
+		}
+		comp(0, 0);
+		System.out.println(ans);
+	}
+
+	private static void comp(int start, int index) {
+		if (index == T) {
+			return;
+		}
+		for (int i = start; i < T; i++) {
+
+			S *= in[i][0];
+			R += in[i][1];
+			ans = Math.min(ans, S - R > 0 ? S - R : R - S);
+			comp(i + 1, index + 1);
+			S /= in[i][0];
+			R -= in[i][1];
+		}
+	}
+}
