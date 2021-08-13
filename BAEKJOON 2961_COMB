@@ -1,0 +1,35 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static int[] sin, sem;
+	static int T, ans = Integer.MAX_VALUE, S = 1, R;
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		T = Integer.parseInt(br.readLine());
+		sin = new int[T];
+		sem = new int[T];
+		for (int t = 0; t < T; t++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			sin[t] = Integer.parseInt(st.nextToken());
+			sem[t] = Integer.parseInt(st.nextToken());
+		}
+		
+		comb(0,0);
+		System.out.println(ans);
+	}
+
+	private static void comb(int start, int index) {
+		if (index == T) {
+			return;
+		}
+		S *= sin[index];
+		R += sem[index];
+		ans = Math.min(ans, Math.abs(S-R));
+		comb(start + 1, index + 1);
+		S /= sin[index];
+		R -= sem[index];
+		comb(start + 1, index + 1);
+	}
+}
