@@ -1,0 +1,39 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static int[] in, out;
+	static boolean[] select;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+
+		in = new int[N];
+		select = new boolean[N];
+		out = new int[M];
+		for (int i = 0; i < N; i++) {
+			in[i] =i+1;
+		}
+		comb(0,0);
+	}
+
+	static void comb(int start, int index) {
+		if (index == out.length) {
+			for (int i = 0; i < out.length; i++) {
+				System.out.print(out[i]+" ");
+			}
+			System.out.println();
+			return;
+		}
+		if(start == in.length)
+			return;
+		
+		out[index] = in[start];
+		comb(start + 1,index + 1);
+		comb(start + 1,index);		
+	}
+}
