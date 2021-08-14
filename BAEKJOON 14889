@@ -1,0 +1,55 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+	static int[][] arr;
+	static int[] S, L;
+	static int N, ans = Integer.MAX_VALUE, ssum, lsum, in, count;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		N = Integer.parseInt(br.readLine());
+		arr = new int[N][N];
+		S = new int[N / 2];
+		L = new int[N / 2];
+		for (int i = 0; i < N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < N; j++) {
+				arr[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+		comb(0, 0);
+		System.out.println(ans);
+	}
+
+	static void comb(int start, int index) {
+		if (index == N / 2) {
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < L.length; j++) {
+					if (S[j] == i)
+						count++;
+				}
+				if(count == 0)
+					L[in++] = i;
+				count = 0;
+			}
+			for (int i = 0; i < N/2; i++) {
+				for (int j = 0; j <N/2; j++) {
+					ssum += arr[S[i]][S[j]];
+					lsum += arr[L[i]][L[j]];
+				}
+			}
+
+			ans = Math.min(ans, Math.abs(ssum-lsum));
+			in = 0; ssum = 0; lsum = 0;
+			return;
+		}
+		if (start == N)
+			return;
+		S[index] = start;
+		comb(start + 1, index + 1);
+		comb(start + 1, index);
+	}
+}
