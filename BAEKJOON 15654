@@ -1,0 +1,45 @@
+package BJ;
+
+import java.io.*;
+import java.util.*;
+
+public class BJ15649N과M_5 {
+	static int[] in, out;
+	static boolean[] select;
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		in = new int[N];
+		select = new boolean[N];
+		out = new int[M];
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			in[i] =Integer.parseInt(st.nextToken());
+		}
+		Arrays.sort(in);
+		comb(0);
+		bw.flush();
+	}
+
+	static void comb(int index) throws Exception{
+		if (index == out.length) {
+			for (int i = 0; i < out.length; i++) {
+				bw.write(out[i]+" ");
+			}
+			bw.newLine();
+			return;
+		}
+		for (int i = 0; i < in.length; i++) {
+			if(select[i]) continue;
+			out[index] = in[i];
+			select[i] = true;
+			comb(index + 1);
+			select[i] = false;
+		}
+		
+	}
+}
