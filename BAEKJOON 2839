@@ -1,0 +1,29 @@
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int N = sc.nextInt();
+		int count = 1, ans = Integer.MAX_VALUE;
+
+		if (N % 5 == 0)
+			ans = Math.min(ans, N / 5);
+		if (N % 3 == 0)
+			ans = Math.min(ans, N / 3);
+		while (true) {
+
+			if ((N - (count * 5)) < 0) {
+				break;
+			} else if ((N - (count * 5)) % 3 == 0) {
+				ans = Math.min(ans, (N - (count * 5)) / 3 + count);
+				count++;
+			} else if ((N - (count * 5)) % 3 > 0) {
+				count++;
+			}
+		}
+		if (ans == Integer.MAX_VALUE)
+			System.out.println("-1");
+		else
+			System.out.println(ans);
+	}
+}
