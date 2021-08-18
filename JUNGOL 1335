@@ -1,0 +1,48 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N, blue, white;
+	static int[][] arr;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int N = Integer.parseInt(br.readLine());
+		arr = new int[N][N];
+		
+		for (int i = 0; i < N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < N; j++) {
+				arr[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+		go(0,0,N);
+		System.out.println(white);
+		System.out.println(blue);
+	}
+	private static void go(int y, int x, int n) {
+		if(n==0)
+			return;
+		boolean check = false;
+		int first = arr[y][x];
+		for (int i = y; i < y+n; i++) {
+			for (int j = x; j < x+n; j++) {
+				if(arr[i][j] != first)
+					check = true;
+			}
+		}
+		
+		if(check) {
+			go(y,x,n/2);
+			go(y+n/2,x,n/2);
+			go(y,x+n/2,n/2);
+			go(y+n/2,x+n/2,n/2);
+		}else {
+			if(first == 0)
+				white++;
+			else
+				blue++;
+		}
+	}
+}
