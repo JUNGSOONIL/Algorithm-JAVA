@@ -1,0 +1,73 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+
+	static int[] output = new int[7];
+	static int sum;
+	public static void main(String[] args) {
+		
+		Scanner in = new Scanner(System.in);
+		int[] input = new int[9];
+		for (int i = 0; i < 9; i++) {
+			input[i] = in.nextInt();
+		}
+		Arrays.sort(input);
+		int n = input.length;
+		int r = 7,sum = 0;
+		int[] output = new int[n];
+		// 뒤쪽부터 r개만큼 1 채우기
+		int count = 0;
+		while (++count <= r)
+			output[n - count] = 1;
+		
+		do {
+			// 조합사용
+			for (int i = 0; i < n; i++) {
+				if (output[i] == 1)
+					sum = sum + input[i];
+			}
+			if(sum == 100) {
+				for (int j = 0; j < n; j++) {
+					if (output[j] == 1)
+						System.out.println(input[j]);
+				}
+				return;
+			}
+			sum = 0;
+		} while (np(output));
+
+	}
+
+	private static boolean np(int[] numbers) {
+		int N = numbers.length;
+
+		// 1. 꼭대기 i 를 찾는다. 꼭대기를 통해 교환위치 i-1 찾는다.
+		int i = N - 1;
+		while (i > 0 && numbers[i - 1] >= numbers[i])
+			--i;
+
+		if (i == 0)
+			return false;
+		// 2. i-1 위치값하고 교환할 큰 값 찾기
+		int j = N - 1;
+		while (numbers[i - 1] >= numbers[j])
+			--j;
+
+		// 3. i-1 위치값과 j 위치값 교환
+		swap(numbers, i - 1, j);
+
+		// 4. 꼭대기부터 멘 뒤까지 내림차순 형태의 순열을 오름차순으로 변경
+		int k = N - 1;
+		while (i < k) {
+			swap(numbers, k--, i++);
+		}
+		return true;
+	}
+
+	private static void swap(int[] numbers, int i, int j) {
+		int temp = numbers[i];
+		numbers[i] = numbers[j];
+		numbers[j] = temp;
+	}
+}
