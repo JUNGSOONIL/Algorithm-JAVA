@@ -1,0 +1,53 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+	static int[][] map;
+	static int[] out;
+	static boolean[] select;
+	static int T, N, ans, min;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		T = Integer.parseInt(br.readLine());
+
+		for (int t = 1; t <= T; t++) {
+			N = Integer.parseInt(br.readLine());
+			map = new int[N + 2][2];
+			out = new int[N];
+			select = new boolean[N];
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int i = 0; i < N + 2; i++) {
+				map[i][0] = Integer.parseInt(st.nextToken());
+				map[i][1] = Integer.parseInt(st.nextToken());
+			}
+			min = Integer.MAX_VALUE;
+			perm(0);
+			System.out.println("#"+t+" "+min);
+		}
+	}
+
+	static void perm(int index) {
+
+		if (index == N) {
+			ans = 0;
+			ans += Math.abs(map[0][0] - map[out[0]][0]) + Math.abs(map[0][1] - map[out[0]][1]);
+			for (int i = 0; i < N - 1; i++) {
+				ans += Math.abs(map[out[i]][0] - map[out[i + 1]][0]) + Math.abs(map[out[i]][1] - map[out[i + 1]][1]);
+			}
+			ans += Math.abs(map[1][0] - map[out[N - 1]][0]) + Math.abs(map[1][1] - map[out[N - 1]][1]);
+			
+			min = Math.min(min, ans);
+			return;
+		}
+		for (int i = 0; i < N; i++) {
+			if (select[i])
+				continue;
+
+			out[index] = i + 2;
+			select[i] = true;
+			perm(index + 1);
+			select[i] = false;
+		}
+	}
+}
