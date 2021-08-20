@@ -1,0 +1,46 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Stack;
+
+public class Solution {
+	
+	static Stack<Character> s = new Stack<>();
+	static Stack<Integer> ss = new Stack<>();
+	static int N;
+	static String back;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		for (int t = 1; t <=10; t++) {
+			back="";
+			N = Integer.parseInt(br.readLine());
+			String str = br.readLine();
+			for (int i = 0; i < N; i++) {
+				if(str.charAt(i) >='0' && str.charAt(i) <= '9') {
+					back +=str.charAt(i);
+				}
+				else
+					if(str.charAt(i) == '*')
+						s.push(str.charAt(i));
+					else {
+						while(!s.isEmpty())
+							back += s.pop();
+						s.push(str.charAt(i));
+					}
+			}while(!s.isEmpty())
+				back += s.pop();
+			
+			for (int i = 0; i < N; i++) {
+				if(back.charAt(i) >='0' && back.charAt(i) <= '9')
+					ss.push(back.charAt(i)-'0');
+				else
+					if(back.charAt(i)=='+') {
+						ss.push(ss.pop()+ss.pop());
+					}
+					else {
+						ss.push(ss.pop()*ss.pop());
+					}
+			}
+			System.out.println("#"+t+" "+ss.pop());
+		}
+	}
+}
