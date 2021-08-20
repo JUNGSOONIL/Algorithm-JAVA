@@ -1,0 +1,53 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Solution {
+	
+	static int count;
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+
+		for (int t = 1; t <= T; t++) {
+			int N = Integer.parseInt(br.readLine());
+			int[] input = new int[N];
+			int[] output = new int[N];
+			boolean[] select = new boolean[N];
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int i = 0; i < N; i++) {
+				input[i] = Integer.parseInt(st.nextToken());
+			}
+			perm(0, input, output, select);
+			System.out.println("#"+t+" "+count);
+			count = 0;
+		}
+	}
+
+	private static void perm(int index ,int[] in, int[] out, boolean[] visit) {
+		if (index == out.length) {
+			subset(0,0,0,out);
+			//System.out.println(Arrays.toString(out));
+			return;
+		}
+		for (int i = 0; i < out.length; i++) {
+			if (visit[i])
+				continue;
+			visit[i] = true;
+			out[index] = in[i];
+			perm( index + 1 ,in, out,visit);
+			visit[i] = false;
+		}
+	}
+	
+	private static void subset(int index, int lsum, int rsum, int[] in) {
+		if(index == in.length) {
+			count++;
+			return;
+		}
+		subset(index+1, lsum+in[index],rsum,in);
+		System.out.println(lsum);
+		if(lsum>=rsum+in[index])
+			subset(index+1, lsum,rsum+in[index],in);
+	}
+}
