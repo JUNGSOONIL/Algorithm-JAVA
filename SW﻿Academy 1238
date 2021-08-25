@@ -1,0 +1,55 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+	static int N, V, ans, max;
+	static int[][] arr;
+	static boolean[] map;
+	static int[] depth;
+	static Queue<Integer> q = new LinkedList<Integer>();
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		for (int t = 1; t <= 10; t++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+
+			N = Integer.parseInt(st.nextToken());
+			V = Integer.parseInt(st.nextToken());
+			arr = new int[101][101];
+			map = new boolean[101];
+			depth = new int[101];
+			ans = 0; max = 0;
+			st = new StringTokenizer(br.readLine());
+			for (int i = 0; i < N / 2; i++) {
+				arr[Integer.parseInt(st.nextToken())][Integer.parseInt(st.nextToken())] = 1;
+			}
+			BFS(V);
+			for (int i = 0; i < 101; i++) {
+				if (depth[i] > max)
+					max = depth[i];
+			}
+			for (int i = 0; i < 101; i++) {
+				if (depth[i] == max)
+					ans = Math.max(ans, i);
+			}
+			System.out.println("#" + t + " " + ans);
+		}
+
+	}
+
+	private static void BFS(int v) {
+		q.offer(v);
+		map[v] = true;
+		depth[v] = 1;
+		while (!q.isEmpty()) {
+			int s = q.poll();
+			for (int i = 0; i < 101; i++) {
+				if(arr[s][i] == 1 && !map[i]) {
+					q.offer(i);
+					map[i] = true;
+					depth[i] += depth[s] + 1;
+				}
+			}
+		}
+	}
+}
