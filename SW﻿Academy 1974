@@ -1,0 +1,59 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Solution {
+
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int T = Integer.parseInt(br.readLine());
+		int[][] arr = new int[9][9];
+		for (int t = 1; t <=T; t++) {
+			int ans = 0;
+			for (int i = 0; i < 9; i++) {
+				StringTokenizer st = new StringTokenizer(br.readLine());
+				boolean[] select = new boolean[10];
+				for (int j = 0; j < 9; j++) {
+					int n = Integer.parseInt(st.nextToken());
+					if(select[n] == true)
+						ans= -1;
+					else
+						select[n] = true;
+					arr[i][j] = n;
+				}
+			}
+			
+			for (int i = 0; i < 9; i++) {
+				boolean[] select = new boolean[10];
+				for (int j = 0; j < 9; j++) {
+					if(select[arr[j][i]] == true)
+						ans= -1;
+					else
+						select[arr[j][i]] = true;
+				}
+			}
+			
+			for (int i = 0; i < 9; i = i + 3) {
+				for (int j = 0; j < 9; j = j+3) {
+					boolean[] select = new boolean[10];
+					if(i%3==0 && j%3==0) {
+						for (int n = i; n < i+3; n++) {
+							for (int m = j; m < j+3; m++) {
+								if(select[arr[n][m]] == true)
+									ans= -1;
+								else
+									select[arr[n][m]] = true;
+							}
+						}
+					}
+				}
+			}
+			System.out.print("#"+t+" ");
+			if(ans == -1)
+				System.out.println(0);
+			else
+				System.out.println(1);
+		}
+	}
+}
