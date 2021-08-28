@@ -1,0 +1,58 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N, M, ans, max;
+	static ArrayList<ArrayList<Edge>> vertex;
+	static PriorityQueue<Edge> pq = new PriorityQueue<>((a, b) -> Integer.compare(a.c, b.c));
+	static boolean[] visit;
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		vertex = new ArrayList<ArrayList<Edge>>();
+		for (int i = 0; i <N; i++) {
+			vertex.add(new ArrayList<Edge>());
+		}
+		
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int y = Integer.parseInt(st.nextToken())-1;
+			int x = Integer.parseInt(st.nextToken())-1;
+			int v = Integer.parseInt(st.nextToken());
+			vertex.get(y).add(new Edge(x,v));
+			vertex.get(x).add(new Edge(y,v));
+		}
+		
+		visit = new boolean[N];
+		int cnt = 0;
+		visit[0] = true;
+		pq.addAll(vertex.get(0));
+		while(!pq.isEmpty()) {
+			Edge edge = pq.poll();
+			if(visit[edge.v]) continue;
+			visit[edge.v] = true;
+			pq.addAll(vertex.get(edge.v));
+			max = Math.max(max, edge.c);
+			ans += edge.c;
+			cnt++;
+			if(cnt == N-1)
+				break;
+		}
+		System.out.println(ans- max);
+	}
+
+	static class Edge {
+		int v;
+		int c;
+		public Edge(int v, int c) {
+			this.v = v;
+			this.c = c;
+		}
+	}
+}
