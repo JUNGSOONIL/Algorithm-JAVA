@@ -1,0 +1,71 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, M;
+	static long sum, ans;
+	static ArrayList<ArrayList<Edge>> list;
+	static boolean[] visit;
+	static PriorityQueue<Edge> pq = new PriorityQueue<>((a,b) -> a.v - b.v);
+	
+	
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		sum = 0;
+		ans = 0;
+		
+		list = new ArrayList<ArrayList<Edge>>();
+		for (int i = 0; i <=N; i++) {
+			list.add(new ArrayList<Edge>());
+		}
+		visit = new boolean[N+1];
+		
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			int v = Integer.parseInt(st.nextToken());
+			sum += v;
+			list.get(s).add(new Edge(e, v));
+			list.get(e).add(new Edge(s, v));
+		}
+		pq.clear();
+		
+		int cnt = 0;
+		
+		visit[1] = true;
+		pq.addAll(list.get(1));
+	
+		while(!pq.isEmpty()) {
+			Edge e = pq.poll();
+			if(visit[e.s]) continue;
+			pq.addAll(list.get(e.s));
+			visit[e.s] = true;
+			ans += e.v;
+			cnt++;
+			if(cnt == N-1)
+				break;
+		}
+		if(cnt != N-1)
+			System.out.println(-1);
+		else
+			System.out.println(sum-ans);
+	}
+
+	static class Edge {
+		int s, v;
+
+		public Edge(int s, int v) {
+			this.s = s;
+			this.v = v;
+		}
+	}
+}
