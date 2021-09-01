@@ -1,0 +1,47 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	
+	static int[][] arr;
+	static Queue<Integer> q = new LinkedList<Integer>();
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		arr = new int[N][N];
+		for (int i = 0; i < N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < N; j++) {
+				arr[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+		check(N);
+		System.out.println(arr[0][0]);
+		
+	}
+	
+	static void check(int n) {
+		if(n == 1)
+			return;
+		for (int i = 0; i < n; i = i+2) {
+			int []max = new int[4];
+			for (int j = 0; j < n; j = j+2) {
+				int idx = 0;
+				max[idx++] = arr[i][j];
+				max[idx++] = arr[i][j+1];
+				max[idx++] = arr[i+1][j];
+				max[idx] = arr[i+1][j+1];
+				Arrays.sort(max);
+				q.offer(max[2]);
+			}
+		}
+		n = n/2;
+		arr = new int[n][n];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				arr[i][j] = q.poll();
+			}
+		}
+		check(n);
+	}
+}
