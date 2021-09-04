@@ -1,0 +1,41 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N,M;
+	static boolean[][] arr;
+	static boolean[] select;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		
+		select = new boolean[N+1];
+		arr = new boolean[N+1][N+1];
+		
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int y = Integer.parseInt(st.nextToken());
+			int x = Integer.parseInt(st.nextToken());
+			arr[y][x] = arr[x][y] = true;
+		}
+		int ans = 0;
+		for (int i = 1; i <=N; i++) {
+			if(!select[i]) {
+				DFS(i);
+				ans++;
+			}
+		}
+		System.out.println(ans);
+	}
+	private static void DFS(int x) {
+		select[x] = true;
+		for (int i = 1; i <=N; i++) {
+			if(arr[x][i] && !select[i])
+				DFS(i);
+		}
+	}
+}
