@@ -1,0 +1,47 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, K;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		DFS();
+	}
+	private static void DFS() {
+		boolean[] select = new boolean[100001];
+		Queue<Integer> q = new LinkedList<Integer>();
+		int[] cnt = new int[100001];
+		select[N] = true;
+		cnt[N] = 0;
+		q.offer(N);
+		while(!q.isEmpty()) {
+			int n = q.poll();
+			if(n == K) {
+				System.out.println(cnt[K]);
+				return;
+			}
+			if(n-1 >=0 && !select[n-1] ) {
+				select[n-1] = true;
+				cnt[n-1] = cnt[n] + 1;
+				q.offer(n-1);
+			}
+			if(n+1 <= 100000 && !select[n+1]) {
+				select[n+1] = true;
+				cnt[n+1] = cnt[n] + 1;
+				q.offer(n+1);
+			}
+			if(n*2 <=100000 && !select[n*2]) {
+				select[n*2] = true;
+				cnt[n*2] = cnt[n] + 1;
+				q.offer(n*2);
+			}
+		}
+	}
+}
