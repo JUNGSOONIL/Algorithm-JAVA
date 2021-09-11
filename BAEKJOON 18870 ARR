@@ -1,0 +1,34 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb =new StringBuilder();
+		int n = Integer.parseInt(br.readLine());
+		
+		int[] arr = new int[n];
+		int[] copy = new int[n];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < n; i++) {
+			int m = Integer.parseInt(st.nextToken());
+			arr[i] = copy[i] = m;
+		}
+		
+		Arrays.sort(arr);
+		
+		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+		int cnt = 0;
+		for (int i : arr) {
+			if(!map.containsKey(i)) {
+				map.put(i, cnt++);
+			}
+		}
+		
+		for (int i : copy) {
+			sb.append(map.get(i)+" ");
+		}
+		System.out.println(sb);
+	}
+}
