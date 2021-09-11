@@ -12,9 +12,9 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		K = Integer.parseInt(st.nextToken());
-		DFS();
+		BFS();
 	}
-	private static void DFS() {
+	private static void BFS() {
 		boolean[] select = new boolean[100001];
 		Queue<Integer> q = new LinkedList<Integer>();
 		int[] cnt = new int[100001];
