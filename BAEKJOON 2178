@@ -1,0 +1,48 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N, M;
+	static char[][] map;
+	static int[][] select;
+	static int[] dy = { -1, 1, 0, 0 };
+	static int[] dx = { 0, 0, -1, 1 };
+	static Queue<int[]> q = new LinkedList<>();
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		map = new char[N][M];
+		select = new int[N][M];
+		
+		for (int i = 0; i < N; i++) {
+			String str = br.readLine();
+			map[i] = str.toCharArray();
+		}
+		BFS(0, 0);
+		System.out.println(select[N-1][M-1]);
+	}
+
+	private static void BFS(int y, int x) {
+		q.offer(new int[] {y,x});
+		select[y][x] = 1;
+		while(!q.isEmpty()) {
+			int[] arr = q.poll();
+			for (int i = 0; i < 4; i++) {
+				int ny = arr[0] + dy[i];
+				int nx = arr[1] + dx[i];
+				if(ny < 0 || nx < 0 || ny >=N || nx >=M) continue;
+				if(select[ny][nx] != 0 || map[ny][nx] == '0') continue;
+				q.offer(new int[] {ny,nx});
+				select[ny][nx] = select[arr[0]][arr[1]]+1;
+				if(ny == N-1 && nx == M-1)
+					return;
+			}
+		}
+	}
+}
