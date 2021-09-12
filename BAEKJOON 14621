@@ -1,0 +1,63 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N,M;
+	static int[] parent;
+	static String[] MW;
+	static int[][] map;
+	public static void main(String[] args) throws Exception{
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		parent = new int[N+1];
+		for (int i = 1; i <=N; i++) {
+			parent[i] = i;
+		}
+		MW = new String[N+1];
+		st = new StringTokenizer(br.readLine());
+		for (int i = 1; i <=N; i++) {
+			MW[i] = st.nextToken();
+		}
+		map = new int[M][3];
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			map[i][0]  = Integer.parseInt(st.nextToken());
+			map[i][1]  = Integer.parseInt(st.nextToken());
+			map[i][2]  = Integer.parseInt(st.nextToken());
+		}
+		Arrays.sort(map, (a,b)-> a[2] - b[2]);
+		int cnt=0, ans =0;
+		for (int i = 0; i < M; i++) {
+			if(find(map[i][0]) == find(map[i][1])) continue;
+			if(MW[map[i][0]].equals(MW[map[i][1]])) continue;
+			union(map[i][0], map[i][1]);
+			ans += map[i][2];
+			cnt++;
+		}
+		if(cnt == N-1)
+			System.out.println(ans);
+		else
+			System.out.println(-1);
+		
+	}
+	
+	static int find(int a) {
+		if(parent[a] == a)
+			return a;
+		return parent[a] = find(parent[a]);
+	}
+	
+	static void union(int a, int b) {
+		int roota = find(a);
+		int rootb = find(b);
+		if(rootb > roota)
+			parent[roota] = rootb;
+		else 
+			parent[rootb] = roota;
+	}
+}
