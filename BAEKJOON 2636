@@ -1,0 +1,81 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int R, C, time, cnt;
+	static int[][] map;
+	static boolean[][] visita, visitc;
+	static int[] dy = { -1, 1, 0, 0 }, dx = { 0, 0, -1, 1 };
+	static Queue<int[]> qa = new LinkedList<>();
+	static Queue<int[]> qc = new LinkedList<>();
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		R = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
+
+		map = new int[R][C];
+		visita = new boolean[R][C];
+		visitc = new boolean[R][C];
+
+		for (int i = 0; i < R; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < C; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+
+		visita[0][0] = true;
+		qa.offer(new int[] { 0, 0 });
+		while (true) {
+			checkbfs();
+			if (qc.isEmpty())
+				break;
+			change();
+			time++;
+		}
+		System.out.println(time);
+		System.out.println(cnt);
+	}
+
+	private static void change() {
+		cnt = 0;
+		while (!qc.isEmpty()) {
+			int[] n = qc.poll();
+			map[n[0]][n[1]] = 0;
+			visita[n[0]][n[1]] = true;
+			qa.offer(n);
+			cnt++;
+		}
+
+	}
+
+	private static void checkbfs() {
+		while (!qa.isEmpty()) {
+			int[] n = qa.poll();
+			for (int i = 0; i < 4; i++) {
+				int ny = n[0] + dy[i];
+				int nx = n[1] + dx[i];
+				if (ny < 0 || nx < 0 || ny >= R || nx >= C || visita[ny][nx])
+					continue;
+				if (map[ny][nx] == 0) {
+					qa.offer(new int[] { ny, nx });
+					visita[ny][nx] = true;
+				}
+				if (map[ny][nx] == 1) {
+					if (visitc[ny][nx])
+						continue;
+					qc.offer(new int[] { ny, nx });
+					visitc[ny][nx] = true;
+				}
+			}
+		}
+
+	}
+}
