@@ -13,7 +13,7 @@ public class Main {
 		int[][] map = new int[N+1][N+1];
 		for (int i = 1; i <=N; i++) {
 			for (int j = 1; j <=N; j++) {
-				map[i][j] = 5;
+				map[i][j] = 500000;
 				if(i==j)
 					map[i][j] = 0;
 			}
