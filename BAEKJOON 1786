@@ -1,0 +1,40 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		char[] T = br.readLine().toCharArray();
+		char[] P = br.readLine().toCharArray();
+
+		int tsize = T.length, psize = P.length;
+
+		int[] pi = new int[psize];
+	    for(int i=1, j=0; i<psize; i++){
+	        while(j > 0 && P[i] != P[j]) {
+	        	j = pi[j-1];  
+	        }
+	        if(P[i] == P[j]) pi[i] = ++j;
+	    }
+		int cnt = 0;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0, j = 0; i < tsize; ++i) {
+
+			while (j > 0 && T[i] != P[j])
+				j = pi[j - 1];
+
+			if (T[i] == P[j]) { 
+				if (j == psize - 1) { 
+					cnt++; 
+					sb.append((i + 2) - psize).append("\n");
+					j = pi[j];
+				} else {
+					j++;
+				}
+			}
+		}
+		System.out.println(cnt);
+		System.out.println(sb);
+	}
+}
