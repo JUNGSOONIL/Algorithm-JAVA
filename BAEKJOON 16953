@@ -1,0 +1,32 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int A, B;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		A = Integer.parseInt(st.nextToken());
+		B = Integer.parseInt(st.nextToken());
+		bfs(A);
+	}
+	private static void bfs(int n) {
+		Queue<long[]> q = new LinkedList<>();
+		q.offer(new long[] {n,1});
+		while(!q.isEmpty()) {
+			long[] m = q.poll();
+			if(m[0] == B) {
+				System.out.println(m[1]);
+				return;
+			}
+			if(m[0]*2 <= B) 
+				q.offer(new long[] {m[0]*2, m[1]+1});
+			if(m[0]*10+1 <= B) 
+				q.offer(new long[] {m[0]*10+1, m[1]+1});
+		}
+		System.out.println(-1);
+	}
+}
