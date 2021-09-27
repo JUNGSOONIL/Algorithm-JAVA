@@ -1,0 +1,44 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+
+
+public class Main {
+
+	public static void main(String[] args) throws Exception{
+		// 입력처리 부분
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringBuilder sb = new StringBuilder();
+		int M = Integer.parseInt(st.nextToken());
+		int N = Integer.parseInt(st.nextToken());
+		
+		// 해당 숫자에 대응하는 영어 문자열 저장, 두번째 자리까지 같은 문자열은 없기때문에 두번째 자리까지 저장
+		String[] number = {"ze","on","tw","th","fo","fi","si","se","ei","ni"};
+		
+		//TreeMap을 이용해 key 값에는 위에서 만든 영어 문자열을, value 값에는 원래 숫자값을 넣어서 사용 TreeMap는 key값으로 자동 정렬을 해준다.
+		TreeMap<String, Integer> map = new TreeMap<>();
+		
+		//여기서 이제 입력값을 통해 반복문을 돌려준다.
+		for (int i = M; i <= N; i++) {
+			String str = "";
+			if(i < 10) //만약 한자리 수라면 바로 number배열에 해당 숫자와 대응되는 문자열을 str에 저장하고
+				str = number[i];
+			else // 2자리 수라면 10으로 나눈 몫과 10으로나눈 나머지를 이용해 대응하는 문자열을 더해서 str에 저장한다.
+				str = number[i/10]+number[i%10];
+			map.put(str, i); // 이후 str과 원래 숫자를 TreeMap에 삽입한다.
+		}
+		
+		int cnt = 0; // 10개마나 줄바꿈을 하기위해
+		
+		for (int n : map.values()) { // map에 value값만큼 foreach문을 돌려준다 TreeMap이기때문에 이미 정렬되어 있다.
+			sb.append(n).append(" "); // 해당 value값을 StringBuilder에 넣어주고 한칸 띄어준다.
+			if(++cnt == 10) { // StringBuilder 값이 추가될때마다 카운트를 증가시키고 만약 카운트가 10이된다면 줄바꿈을 추가해주고 카운트를 0으로 초기화한다.
+				sb.append("\n");
+				cnt = 0;
+			} 
+		}
+		System.out.println(sb); // StringBuilder를 출력한다.
+	}
+}
