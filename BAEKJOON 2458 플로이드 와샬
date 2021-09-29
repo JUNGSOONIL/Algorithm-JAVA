@@ -1,0 +1,59 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N, M, ans;
+	static int[][] map1, map2; 
+	static boolean[] visit;
+	static int[] number;
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		map1 = new int[N+1][N+1];
+		map2 = new int[N+1][N+1]; 
+		number = new int[N+1];
+		for (int i = 1; i <= N ; i++) {
+			for (int j = 1; j <= N; j++) {
+				if(i==j) 
+					continue;
+				map1[i][j] = 250000;
+				map2[i][j] = 250000;
+			}
+		}
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			map1[s][e] = 1;
+			map2[e][s] = 1;
+		}
+		for (int k = 1; k <=N; k++) {
+			for (int i = 1; i <=N; i++) {
+				if(k==i)continue;
+				for (int j = 1; j <=N; j++) {
+					if(k==j || i==j)continue;
+					map1[i][j] = Math.min(map1[i][j], map1[i][k]+map1[k][j]);
+					map2[i][j] = Math.min(map2[i][j], map2[i][k]+map2[k][j]);
+				}
+			}
+		}
+		for (int i = 1; i <= N ; i++) {
+			for (int j = 1; j <= N; j++) {
+				if(map1[i][j] != 0 && map1[i][j] < 250000)
+					number[i]++;
+				if(map2[i][j] != 0 && map2[i][j] < 250000)
+					number[i]++;
+			}
+		}
+		for (int i = 1; i <=N; i++) {
+			if(number[i] == N-1)
+				ans++;
+		}
+		System.out.println(ans);
+	}
+}
