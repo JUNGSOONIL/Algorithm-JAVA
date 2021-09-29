@@ -1,0 +1,60 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N, M, cnt, ans;
+	static ArrayList<Integer>[] big, small;
+	static boolean[] visit;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		big = new ArrayList[N + 1];
+		small = new ArrayList[N + 1];
+		for (int i = 1; i < N + 1; i++) {
+			big[i] = new ArrayList<>();
+			small[i] = new ArrayList<>();
+		}
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			big[s].add(e);
+			small[e].add(s);
+		}
+		for (int i = 1; i < N + 1; i++) {
+			visit = new boolean[N + 1];
+			cnt = 0;
+			dfsbig(i);
+			dfssmall(i);
+			if (cnt == N - 1)
+				ans++;
+		}
+		System.out.println(ans);
+	}
+
+	private static void dfsbig(int n) {
+		visit[n] = true;
+		for (int b : big[n]) {
+			if (!visit[b]) {
+				cnt++;
+				dfsbig(b);
+			}
+
+		}
+	}
+
+	private static void dfssmall(int n) {
+		visit[n] = true;
+		for (int s : small[n]) {
+			if (!visit[s]) {
+				cnt++;
+				dfssmall(s);
+			}
+		}
+	}
+}
