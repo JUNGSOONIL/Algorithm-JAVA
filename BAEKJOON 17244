@@ -1,0 +1,65 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N, M;
+	static char x ='0';
+	static char[][] map;
+	static boolean visit[][][];
+	static Queue<Node> q = new LinkedList<>();
+	static int[] dy = { -1, 1, 0, 0 }, dx = { 0, 0, -1, 1 };
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		visit = new boolean[M][N][1 << 5];
+		map = new char[M][N];
+		for (int i = 0; i < M; i++) {
+			map[i] = br.readLine().toCharArray();
+			for (int j = 0; j < N; j++) {
+				if (map[i][j] == 'X')
+					map[i][j] = x++;
+				else if (map[i][j] == 'S') {
+					q.offer(new Node(i, j, 0, 0));
+					visit[i][j][0] = true;
+				}
+			}
+		}
+		System.out.println(bfs());
+	}
+	private static int bfs() {
+		while (!q.isEmpty()) {
+			Node n = q.poll();
+			if (map[n.y][n.x] == 'E' && n.key == (1<<x-'0')-1)
+				return n.d;
+			for (int i = 0; i < 4; i++) {
+				int ny = n.y + dy[i];
+				int nx = n.x + dx[i];
+				int key = n.key;
+				if (ny < 0 || nx < 0 || ny >= M || nx >= N || map[ny][nx] == '#')
+					continue;
+				if (visit[ny][nx][key]) continue;
+				if (map[ny][nx] >= '0' && map[ny][nx] <= '5') {
+					key |= (1 << map[ny][nx] -'0');
+				}
+				visit[ny][nx][key] = true;
+				q.offer(new Node(ny, nx, n.d+1, key));
+			}
+		}
+		return 1;
+	}
+	static class Node {
+		int y, x, d, key;
+		Node(int y, int x, int d, int key) {
+			this.y = y;
+			this.x = x;
+			this.d = d;
+			this.key = key;
+		}
+	}
+}
