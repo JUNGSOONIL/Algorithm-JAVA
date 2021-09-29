@@ -1,0 +1,67 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, M, min = Integer.MAX_VALUE;
+	static char[][] map;
+	static boolean[][][]visit;
+	static int[] dy = { -1, 1, 0, 0 }, dx = { 0, 0, -1, 1 };
+	static Queue<Node> q = new LinkedList<>();
+	
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		map = new char[N][M];
+		visit = new boolean[N][M][1<<6]; //a~f 열쇠 부분집합 표현
+		for (int i = 0; i < N; i++) {
+			map[i] = br.readLine().toCharArray();
+			for (int j = 0; j < M; j++) {
+				if (map[i][j] == '0') {
+					q.offer(new Node(i,j,0,0));
+					visit[i][j][0] = true;
+				}
+			}
+		}
+		System.out.println(bfs());
+	}
+	private static int bfs() {
+		while(!q.isEmpty()) {
+			Node n = q.poll();
+			if(map[n.y][n.x]=='1')
+				return n.d;
+			for (int i = 0; i < 4; i++) {
+				int ny = n.y + dy[i];
+				int nx = n.x + dx[i];
+				int key = n.key;
+				if(ny<0 || nx <0 || ny>= N|| nx >=M || map[ny][nx] =='#') continue;
+				// key - 획득
+				if( map[ny][nx] >= 'a'  &&map[ny][nx] <='f') {
+					key |= (1<<map[ny][nx] - 'a'); // 횟득한키 처리하는부분 
+				}
+				// key - 사용
+				if( map[ny][nx] >= 'A'  &&map[ny][nx] <='F') {
+					if((key & (1<<map[ny][nx] - 'A')) == 0) continue;
+				}
+				if(visit[ny][nx][key]) continue;
+				visit[ny][nx][key] = true;
+				q.offer(new Node(ny,nx,n.d+1,key));
+			}
+		}
+		return -1;
+	}
+	static class Node {
+		int y, x, d, key;
+		Node(int y, int x,int d, int key) {
+			this.y = y;
+			this.x = x;
+			this.d = d;
+			this.key = key;
+		}
+	}
+}
