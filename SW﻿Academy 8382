@@ -1,0 +1,32 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+ 
+public class Solution {
+ 
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
+        for (int t = 1; t <= T; t++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int y1 = Integer.parseInt(st.nextToken());
+            int x1 = Integer.parseInt(st.nextToken());
+            int y2 = Integer.parseInt(st.nextToken());
+            int x2 = Integer.parseInt(st.nextToken());
+             
+            int x = Math.abs(x2-x1);
+            int y = Math.abs(y2-y1);
+            int maxx = Math.max(x, y);
+            int kun = x + y;
+            int val = 0;
+            if(kun%2==0) {
+                val = 2 * kun;
+            }else {
+                val = 2 * kun-1;
+            }
+            int diff = (kun-maxx)*2;
+            val = val - diff;
+            System.out.println("#"+t+" "+val);
+        }
+    }
+}
