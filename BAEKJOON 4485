@@ -1,0 +1,59 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N;
+	static int[][] map;
+	static int[][] cost;
+	static boolean[][] visit;
+	static PriorityQueue<Edge> pq = new PriorityQueue<>((a,b) -> a.c - b.c);
+	static int[] dy = {-1,1,0,0}, dx = {0,0,-1,1};
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int t = 1;
+		while(true) {
+			N = Integer.parseInt(br.readLine());
+			if(N==0) break;
+			map = new int[N][N];
+			cost = new int[N][N]; 
+			visit = new boolean[N][N];
+			for (int i = 0; i < N; i++) {
+				StringTokenizer st =new StringTokenizer(br.readLine());
+				for (int j = 0; j < N; j++) {
+					map[i][j] = Integer.parseInt(st.nextToken());
+					cost[i][j] = Integer.MAX_VALUE;
+				}
+			}
+			dijkstra();
+			System.out.println("Problem " + (t++) + ": " + cost[N-1][N-1]);
+		}
+	}
+	private static void dijkstra() {
+		visit[0][0] = true;
+		cost[0][0] = map[0][0];
+		pq.offer(new Edge(0,0,map[0][0]));
+		while(!pq.isEmpty()) {
+			Edge e = pq.poll();
+			for (int i = 0; i < 4; i++) {
+				int ny = e.y + dy[i];
+				int nx = e.x + dx[i];
+				if (ny < 0 || nx < 0 || ny >= N || nx >= N || visit[ny][nx]) continue;
+				if(cost[ny][nx] > cost[e.y][e.x] + map[ny][nx]) {
+					cost[ny][nx] = cost[e.y][e.x] + map[ny][nx];
+					pq.offer(new Edge(ny, nx, cost[ny][nx]));
+					visit[ny][nx] = true;
+				}
+			}
+		}
+	}
+	static class Edge {
+		int y, x, c;
+		Edge(int y, int x, int c) {
+			this.y = y;
+			this.x = x;
+			this.c = c;
+		}
+	}
+}
