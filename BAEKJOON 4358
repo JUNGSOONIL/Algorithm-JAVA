@@ -11,8 +11,6 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));;
 		String input = br.readLine();
 		while (true) {
-			if(input == null)
-				break;
 			map.put(input, map.getOrDefault(input, 0)+1);
 			cnt++;
 			input = br.readLine();
