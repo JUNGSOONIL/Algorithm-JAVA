@@ -1,0 +1,39 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static long N, R;
+	static long MOD = 1_000_000_007;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Long.parseLong(st.nextToken());
+		R = Long.parseLong(st.nextToken());
+		System.out.println((fak(N) * pow(fak(R) * fak(N - R) % MOD, MOD - 2)%MOD)%MOD);
+	}
+
+	private static long pow(long base, long expo) {
+		long num = 1;
+		while (expo > 0) {
+			if (expo % 2 == 1) {
+				num *= base;
+				num %= MOD;
+			}
+			expo /= 2;
+			base *= base;
+			base %= MOD;
+		}
+		return num;
+	}
+
+	private static long fak(long n) {
+		long num = 1;
+		while (n > 1) {
+			num = num * n--;
+			num = num % MOD;
+		}
+		return num;
+	}
+}
