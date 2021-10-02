@@ -1,0 +1,57 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int T = 1000;
+	static int[][] map;
+	static int N;
+	static long B;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		B = Long.parseLong(st.nextToken());
+		map = new int[N][N];
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < N; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken())%T;
+			}
+		}
+		int[][]res = matrxi(B);
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				System.out.print(res[i][j]+" ");
+			}
+			System.out.println();
+		}
+	}
+	private static int[][] matrxi(long y) {
+		int[][] res = new int[N][N];
+		for (int i = 0; i < N; i++) {
+			res[i][i] = 1;
+		}
+		while(y > 0) {
+			if(y%2 == 1) {
+				res = mul(res,map);
+			}
+			y = y/2;
+			map=mul(map,map);
+		}
+		return res;
+	}
+	private static int[][] mul(int[][] r, int[][] x) {
+		int[][] res = new int[N][N];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				int t = 0;
+				for (int k = 0; k < N; k++) {
+					t = (t%T + (r[i][k]*x[k][j])%T)%T;
+				}
+				res[i][j] = t%T;
+			}
+		}
+		return res;
+	}
+}
