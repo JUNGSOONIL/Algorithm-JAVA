@@ -1,0 +1,57 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, sy, sx, ey, ex;
+	static int[][] visit;
+	static int[] dy = { -2, -2, 2, 2, -1, 1, -1, 1 }, dx = { -1, 1, -1, 1, -2, -2, 2, 2 };
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		for (int t = 1; t <= T; t++) {
+			N = Integer.parseInt(br.readLine());
+			visit = new int[N][N];
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			sy = Integer.parseInt(st.nextToken());
+			sx = Integer.parseInt(st.nextToken());
+			st = new StringTokenizer(br.readLine());
+			ey = Integer.parseInt(st.nextToken());
+			ex = Integer.parseInt(st.nextToken());
+			bfs();
+		}
+	}
+
+	private static void bfs() {
+		Queue<Node> q = new LinkedList<>();
+		q.offer(new Node(sy, sx));
+		visit[sy][sx] = 1;
+		while (!q.isEmpty()) {
+			Node n = q.poll();
+			if(n.y == ey && n.x == ex) {
+				System.out.println(visit[ey][ex] -1);
+				return;
+			}
+			for (int i = 0; i < 8; i++) {
+				int ny = n.y + dy[i];
+				int nx = n.x + dx[i];
+				if(ny< 0 || nx <0 || ny>= N || nx >=N || visit[ny][nx] != 0)
+					continue;
+				q.offer(new Node(ny,nx));
+				visit[ny][nx] = visit[n.y][n.x] + 1;
+			}
+		}
+	}
+
+	static class Node {
+		int y, x;
+
+		Node(int y, int x) {
+			this.y = y;
+			this.x = x;
+		}
+	}
+}
