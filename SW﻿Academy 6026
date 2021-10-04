@@ -1,0 +1,51 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Solution {
+
+	static int M,N;
+	static int MOD = 1_000_000_007;
+	static int[][] dp = new int[101][101];
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		dp[0][0] = 1;
+		for (int i = 1; i <= 100; i++) {
+			dp[i][0] = 1;
+			for (int j = 1; j <= 100; j++) {
+				dp[i][j] = (dp[i-1][j-1] + dp[i-1][j])%MOD;
+			}
+		}
+		int T = Integer.parseInt(br.readLine());
+		for (int t = 1; t <= T; t++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			M = Integer.parseInt(st.nextToken());
+			N = Integer.parseInt(st.nextToken());
+			
+			long ans = 0;
+			int cnt = 0;
+			for (int i = M; i >0; i--) {
+				if(cnt++%2== 0)
+					ans += (dp[M][i] * pow(i,N))%MOD;
+				else
+					ans -= (dp[M][i] * pow(i,N))%MOD;
+				ans= (ans+MOD)%MOD;
+				
+			}
+			System.out.println("#"+t+" "+ans);
+		}
+	}
+	
+	public static long pow(long base, long expo) {
+		long num = 1;
+		while (expo > 0) {
+			if (expo % 2 == 1) {
+				num *= base;
+				num %= MOD;
+			}
+			base = (base * base) % MOD;
+			expo /= 2;
+		}
+		return num;
+	}
+}
