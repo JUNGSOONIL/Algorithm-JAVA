@@ -30,7 +30,6 @@ public class Solution {
 				}
 			}
 			ans = Integer.MAX_VALUE;
-			// 중복순열
 			perm(0);
 			System.out.println("#" + t + " " + ans);
 		}
