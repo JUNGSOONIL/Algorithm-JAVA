@@ -1,0 +1,66 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class Main {
+	static char[][] map= new char[9][9];
+	static ArrayList<Node> list = new ArrayList<>();
+	
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		for (int i = 0; i < 9; i++) {
+			map[i] = br.readLine().toCharArray();
+		}
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				if(map[i][j] == '0')
+					list.add(new Node(i,j));
+			}
+		}
+		check(0);
+	}
+	
+	private static void check(int a) {
+		if(a == list.size()) {
+			for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 9; j++) {
+					System.out.print(map[i][j]);
+				}
+				System.out.println();
+			}
+			System.exit(0);
+		}
+			
+		Node n = list.get(a);
+		boolean[] visit = new boolean[10];
+		for (int i = 0; i < 9; i++) {
+			if(map[n.y][i] != '0')
+				visit[map[n.y][i]-'0'] = true;
+			if(map[i][n.x] != '0')
+				visit[map[i][n.x]-'0'] = true;
+		}
+		int y = (n.y / 3) * 3;
+		int x = (n.x / 3) * 3;
+		for (int i = y; i < y+3; i++) {
+			for (int j = x; j < x+3; j++) {
+				if(map[i][j] != '0')
+					visit[map[i][j]-'0'] = true;
+			}
+		}
+		for (int i = 1; i < 10; i++) {
+			if(!visit[i]) {
+				map[n.y][n.x] =  (char) (i+48);
+				check(a+1);
+				map[n.y][n.x] =  '0';
+			}
+		}
+	}
+
+	static class Node{
+		int y,x;
+		Node(int y, int x){
+			this.y = y;
+			this.x = x;
+		}
+	}
+}
