@@ -1,12 +1,8 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Solution {
-	static int ball, M, N, ans, cnt;
+	static int N, W, H, ans, cnt;
 	static int[][] map, res;
 	static int[] out;
 	static int[] dy = { -1, 1, 0, 0 }, dx = { 0, 0, -1, 1 };
@@ -16,16 +12,15 @@ public class Solution {
 		int T = Integer.parseInt(br.readLine());
 		for (int t = 1; t <= T; t++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			ball = Integer.parseInt(st.nextToken());
-			M = Integer.parseInt(st.nextToken());
 			N = Integer.parseInt(st.nextToken());
-
-			map = new int[N][M];
-			res = new int[N][M];
-			out = new int[ball];
-			for (int i = 0; i < N; i++) {
+			W = Integer.parseInt(st.nextToken());
+			H = Integer.parseInt(st.nextToken());
+			map = new int[H][W];
+			res = new int[H][W];
+			out = new int[N];
+			for (int i = 0; i < H; i++) {
 				st = new StringTokenizer(br.readLine());
-				for (int j = 0; j < M; j++) {
+				for (int j = 0; j < W; j++) {
 					map[i][j] = Integer.parseInt(st.nextToken());
 				}
 			}
@@ -33,18 +28,17 @@ public class Solution {
 			perm(0);
 			System.out.println("#" + t + " " + ans);
 		}
-
 	}
 
 	private static void perm(int index) {
-		if (index == ball) {
+		if (index == N) {
 			copy();
 			move();
 			count();
 			ans = Math.min(ans, cnt);
 			return;
 		}
-		for (int i = 0; i < M; i++) {
+		for (int i = 0; i < W; i++) {
 			out[index] = i;
 			perm(index + 1);
 		}
@@ -52,19 +46,18 @@ public class Solution {
 
 	private static void count() {
 		cnt = 0;
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
+		for (int i = 0; i < H; i++) {
+			for (int j = 0; j < W; j++) {
 				if(res[i][j] != 0)
 					cnt++;
 			}
 		}
-		
 	}
 
 	private static void move() {
-		for (int i = 0; i < ball; i++) {
+		for (int i = 0; i < N; i++) {
 			int n = out[i];
-			for (int j = 0; j < N; j++) {
+			for (int j = 0; j < H; j++) {
 				if (res[j][n] != 0) {
 					bfs(j, n);
 					down();
@@ -76,12 +69,12 @@ public class Solution {
 
 	private static void down() {
 		Stack<Integer> s = new Stack<>();
-		for (int i = 0; i < M; i++) {
-			for (int j = 0; j < N; j++) {
+		for (int i = 0; i < W; i++) {
+			for (int j = 0; j < H; j++) {
 				if(res[j][i] != 0)
 					s.add(res[j][i]);
 			}
-			for (int j = N-1; j >= 0; j--) {
+			for (int j = H-1; j >= 0; j--) {
 				if(s.isEmpty())
 					res[j][i] = 0;
 				else
@@ -103,7 +96,7 @@ public class Solution {
 				for (int j = 0; j < n.d-1; j++) {
 					ny = ny + dy[i];
 					nx = nx + dx[i];
-					if(ny < 0 || nx <0|| ny>=N || nx >= M|| res[ny][nx] == 0) continue;
+					if(ny < 0 || nx <0|| ny>=H || nx >= W|| res[ny][nx] == 0) continue;
 					q.offer(new Node(ny,nx,res[ny][nx]));
 					res[ny][nx] = 0;
 				}
@@ -112,8 +105,8 @@ public class Solution {
 	}
 
 	private static void copy() {
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
+		for (int i = 0; i < H; i++) {
+			for (int j = 0; j < W; j++) {
 				res[i][j] = map[i][j];
 			}
 		}
