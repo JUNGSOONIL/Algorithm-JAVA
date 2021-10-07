@@ -1,0 +1,40 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static boolean[] visit;
+	static int[] input;
+	static int N,S, ans;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		S = Integer.parseInt(st.nextToken());
+		input = new int[N];
+		visit = new boolean[N];
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			input[i] = Integer.parseInt(st.nextToken());
+		}
+		ans = S == 0? -1:0;
+		subset(0);
+		System.out.println(ans);
+	}
+	private static void subset(int index) {
+		if(index == N) {
+			int sum = 0;
+			for (int i = 0; i < N; i++) {
+				if(visit[i])
+					sum += input[i];
+			}
+			if(sum == S)
+				ans++;
+			return;
+		}
+		visit[index] = true;
+		subset(index+1);
+		visit[index] = false;
+		subset(index+1);
+	}
+}
