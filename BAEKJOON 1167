@@ -1,0 +1,59 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class Main {
+	
+	static int V, ans= Integer.MIN_VALUE, back;
+	static ArrayList<Node>[] list;
+	static boolean[] visit;
+	
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		V = Integer.parseInt(br.readLine());
+		list = new ArrayList[V+1];
+		for (int i = 0; i <=V; i++) {
+			list[i] = new ArrayList<>();
+		}
+		for (int i = 0; i < V; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int start = Integer.parseInt(st.nextToken());
+			while(true) {
+				int end = Integer.parseInt(st.nextToken());
+				if(end == -1)
+					break;
+				int edge = Integer.parseInt(st.nextToken());
+				list[start].add(new Node(end,edge));
+			}
+		}
+		visit = new boolean[V+1];
+		dfs(1, 0);
+		visit = new boolean[V+1];
+		dfs(back, 0);
+		System.out.println(ans);
+	}
+	private static void dfs(int start, int sum) {
+		if (sum > ans) {
+			ans = sum;
+			back = start;
+		}
+		visit[start] = true;
+			
+		for (int i = 0; i < list[start].size(); i++) {
+			Node n = list[start].get(i);
+            if(visit[n.end] == false) {
+                dfs(n.end, n.edge + sum);
+                visit[n.end] = true;
+            }
+		}
+	}
+	
+	static class Node{
+		int end, edge;
+		Node(int end, int edge){
+			this.end = end;
+			this.edge = edge;
+		}
+	}
+}
