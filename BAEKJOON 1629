@@ -1,0 +1,31 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static long A, B, C;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		A = Long.parseLong(st.nextToken());
+		B = Long.parseLong(st.nextToken());
+		C = Long.parseLong(st.nextToken());
+
+		System.out.println(pow(A, B));
+	}
+
+	public static long pow(long base, long expo) {
+		if (expo == 1) {
+			return base % C;
+		}
+		
+		long half = pow(base, expo / 2);
+
+		if (expo % 2 == 1) {
+			return (half * half % C) * base % C;
+		}
+		return half * half % C;
+
+	}
+}
