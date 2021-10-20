@@ -1,0 +1,86 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, E, ans;
+	static ArrayList<Edge>[] list;
+	static int[] arr;
+	static boolean[] visit;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		E = Integer.parseInt(st.nextToken());
+		arr = new int[N+1];
+		list= new ArrayList[N+1];
+		for (int i = 0; i <= N; i++) {
+			list[i] = new ArrayList<>();
+		}
+		
+		for (int i = 0; i < E; i++) {
+			st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			int v = Integer.parseInt(st.nextToken());
+			list[s].add(new Edge(e,v));
+			list[e].add(new Edge(s,v));
+		}
+		st = new StringTokenizer(br.readLine());
+		int start = Integer.parseInt(st.nextToken());
+		int end = Integer.parseInt(st.nextToken());
+		for (int i = 0; i < list[start].size(); i++) {
+			Edge edge = list[start].get(i);
+			if(edge.end==end)
+				ans = edge.value;
+		}
+		
+		 int res1 = 0;
+	        res1 += dijkstra(1, start);
+	        res1 += dijkstra(start, end);
+	        res1 += dijkstra(end, N);
+	 
+	        int res2 = 0;
+	        res2 += dijkstra(1, end);
+	        res2 += dijkstra(end, start);
+	        res2 += dijkstra(start, N);
+	 
+	        ans = (res1 >= 200000000 && res2 >= 200000000) ? -1 : Math.min(res1, res2);
+	        System.out.println(ans);
+	}
+	
+	private static int dijkstra(int start, int end) {
+		Arrays.fill(arr,200000000);
+		visit = new boolean[N+1];
+		PriorityQueue<Edge> pq = new PriorityQueue<>((a,b) -> a.value - b.value);
+		
+		pq.offer(new Edge(start,0));
+		arr[start] = 0;
+		
+		while(!pq.isEmpty()) {
+			Edge edge = pq.poll();
+			if(!visit[edge.end]) {
+				visit[edge.end] = true;
+				for (Edge next : list[edge.end]) {
+					if(!visit[next.end] && arr[next.end] > arr[edge.end] + next.value) {
+						arr[next.end] = arr[edge.end] + next.value;
+						pq.offer(new Edge(next.end,arr[next.end]));
+					}
+				}
+			}
+		}
+		return arr[end];
+	}
+
+	static class Edge{
+		int end, value;
+		Edge(int end, int value){
+			this.end = end;
+			this.value = value;
+		}
+	}
+}
