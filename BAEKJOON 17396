@@ -1,0 +1,71 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N, M;
+	static boolean[] visit;
+	static ArrayList<Edge>[] list;
+	static long[] cost;
+	static PriorityQueue<Edge> pq = new PriorityQueue<>((a, b) -> Long.compare(a.value, b.value));
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		visit = new boolean[N];
+		list = new ArrayList[N];
+		cost = new long[N];
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			list[i] = new ArrayList<>();
+			int n = Integer.parseInt(st.nextToken());
+			if (n == 1)
+				visit[i] = true;
+			cost[i] = Long.MAX_VALUE;
+		}
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			int v = Integer.parseInt(st.nextToken());
+			list[s].add(new Edge(e, v));
+			list[e].add(new Edge(s, v));
+		}
+		cost[0] = 0;
+		pq.add(new Edge(0, 0));
+		dijkstra();
+		if(cost[N-1] == Long.MAX_VALUE)
+			System.out.println(-1);
+		else
+			System.out.println(cost[N-1]);
+	}
+
+	private static void dijkstra() {
+		while (!pq.isEmpty()) {
+			Edge edge = pq.poll();	
+			if(visit[edge.end]) continue;
+			visit[edge.end] = true;
+			for (Edge next : list[edge.end]) {
+				if(next.end != N-1 && visit[next.end]) continue;
+				if(cost[next.end] > cost[edge.end] + next.value) {
+					cost[next.end] = cost[edge.end] + next.value;
+					pq.offer(new Edge(next.end,cost[next.end]));
+				}
+			}
+		}
+	}
+
+	static class Edge {
+		int end;
+		long value;
+
+		Edge(int end, long value) {
+			this.end = end;
+			this.value = value;
+		}
+	}
+}
