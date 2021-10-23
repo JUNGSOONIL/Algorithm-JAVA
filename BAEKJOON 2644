@@ -1,0 +1,45 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, y,x;
+	static int[][] map;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine()); // 사람수
+		map = new int[N+1][N+1]; //플로이드 알고리즘 적용할 매트릭스
+		for (int i = 1; i <=N; i++) { // 자기 자신으로 가는 부분은 0, 나머진 max값 지금은 100이니깐 100*100
+			for (int j = 1; j <=N; j++) {
+				if(i!=j)
+					map[i][j] = 10000;
+			}
+		}
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		y = Integer.parseInt(st.nextToken());
+		x = Integer.parseInt(st.nextToken());
+		int T = Integer.parseInt(br.readLine());
+		for (int i = 0; i <T; i++) { // 양방향으로 갈수있도록 갈수있는 부분에 대해서 1의 값으로 바꿔줌
+			st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			map[s][e] = map[e][s] = 1;
+		}
+		
+		for (int k = 1; k <=N; k++) { // 플로이드 와샬 알고리즘 적용
+			for (int i = 1; i <=N; i++) {
+				if(k == i) continue;
+				for (int j = 1; j <=N; j++) {
+					if(k == j || k == i) continue;
+					map[i][j] = Math.min(map[i][j], map[i][k] + map[k][j]);
+				}
+			}
+		}
+		if(map[y][x] == 10000) // 해당 부분은 못간다
+			System.out.println(-1);
+		else // 갈수있으니깐 그 횟수 출력
+			System.out.println(map[y][x]);
+	}
+
+}
