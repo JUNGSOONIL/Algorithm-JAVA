@@ -1,0 +1,28 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		int[] T = new int[N];
+		int[] P = new int[N];
+		int[] dp = new int[N+1]; // 다음 값이랑 비교를 해야되서 1증가
+		for (int i = 0; i <N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			T[i] = Integer.parseInt(st.nextToken());
+			P[i] = Integer.parseInt(st.nextToken());
+		}
+		
+		for (int i = N-1; i >=0; i--) { // 뒤에서부터 dp 배열을 채워 나간다.
+			if(N >= T[i] + i) { // T[i]+i 즉 현재 날짜에서 해당 상담을 할수 있으면
+				dp[i] = Math.max(dp[i+1], P[i]+dp[i+T[i]]); // 이전값과 현재 상담을 하고, 끝났을때 저장된 값중 최대값
+			}
+			else
+				dp[i] = dp[i+1]; // 이전값을 가져옴
+		}
+		System.out.println(dp[0]); // 최종적으로 갱신되는 최대값
+	}
+}
