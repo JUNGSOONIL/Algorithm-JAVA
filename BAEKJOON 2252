@@ -1,0 +1,45 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int [] cnt = new int[N+1]; //자신을 가리키는 갯수 저장 배열
+		List<Integer>[] list = new ArrayList[N+1];
+		Queue<Integer> q = new LinkedList<>();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i <= N; i++) {
+			list[i] = new ArrayList<>();
+		}
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			list[a].add(b);
+			cnt[b]++; // a는 b를 가르키기때문에 가리키는 곳을 카운트
+		}
+		for (int i = 1; i <= N; i++) {
+			if(cnt[i] == 0) // 자신을 가르키는곳이 없는애를 q에 넣음
+				q.offer(i);
+		}
+		while(!q.isEmpty()) {
+			int n = q.poll();  
+			sb.append(n).append(" "); // 큐에서 빼낸 순서대로 출력해준다.
+			for (int next : list[n]) { 
+				cnt[next]--; // 자신을 가리키는 곳을 하나 빼주고
+				if(cnt[next] == 0)  // 가리키는 곳이 없어지면 q에 넣어줌
+					q.offer(next);
+			}
+		}
+		System.out.println(sb);
+	}
+}
