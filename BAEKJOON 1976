@@ -1,0 +1,54 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N,M,check;
+	static int arr[];
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		M = Integer.parseInt(br.readLine());
+		arr = new int[N+1];
+		for (int i = 1; i <=N; i++) {
+			arr[i] = i; // 처음 모두 자기자신을 가리키도록 설정
+		}
+		for (int i = 0; i <N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int j = 0; j <N; j++) {
+				check = Integer.parseInt(st.nextToken());
+				if(check==1) 
+					if(find(i+1) != find(j+1)) // 입력값이 1 이고, 해당 두 정점의 루트가 다르면
+						union(i+1,j+1);
+			}
+		}
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int start = arr[Integer.parseInt(st.nextToken())]; // 시작 도시의 값 저장
+		for (int i = 2; i <=M; i++) {
+			if(start != arr[Integer.parseInt(st.nextToken())]) { // 시작도시와 값이 다르다면 연결이 안되어있음, 즉 갈수없음 arr[0] 은 사용 안하기때문에 -1을 저장해줌 확인용
+				arr[0] = -1;
+                break; 
+			}
+		}
+		if(arr[0] == -1)
+			System.out.println("NO");
+		else
+			System.out.println("YES");
+	}
+	
+	public static int find(int a) {
+		if(a == arr[a])
+			return a;
+		return arr[a] = find(arr[a]);
+	}
+	
+	public static void union(int a, int b) {
+		a = find(a);
+		b = find(b);
+		if (a<b)
+			arr[b] = a;
+		else
+			arr[a] = b;
+	}
+}
