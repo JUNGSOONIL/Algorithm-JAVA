@@ -81,7 +81,7 @@ public class Main {
 				}
 				if(ry == by && rx == bx && map[ry][rx] != 'O') { // 빨간공 파란공 위치가 같을경우
 					// 시작에서 현재까지 이동 거리를 비교해서 둘중 하나를 뒤로 한칸 이동
-                    int red = Math.abs(b.ry - ry) + Math.abs(b.rx - rx);
+                    			int red = Math.abs(b.ry - ry) + Math.abs(b.rx - rx);
 					int blue = Math.abs(b.by - by) + Math.abs(b.bx - bx);
 					
 					if(red > blue) { //레드가 크면 레드가 늦게 온거 더많이 이동했으니
