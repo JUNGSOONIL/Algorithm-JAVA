@@ -1,0 +1,92 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int R, C;
+	static char[][] map;
+	static Queue<Node> go = new LinkedList<>(); // 고슴도치
+	static Queue<Node> water = new LinkedList<>(); // 물
+	static boolean[][] visit; // 고슴도치 방문여부 확인, 물은 map에 표시해주는걸로 방문 체크
+	static int[] dy = { -1, 1, 0, 0 }, dx = { 0, 0, -1, 1 };
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		R = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
+		map = new char[R][C];
+		visit = new boolean[R][C];
+		for (int i = 0; i < R; i++) {
+			map[i] = br.readLine().toCharArray();
+			for (int j = 0; j < C; j++) {
+				if (map[i][j] == 'S') {
+					go.add(new Node(i, j, 0));
+					visit[i][j] = true;
+				} else if (map[i][j] == '*') {
+					water.add(new Node(i, j, 0));
+				}
+			}
+		}
+
+		while (true) { // 고슴도치 이동 시키고 물을 채운다 
+			if (gomove()) // true 넘어오면 비버굴 도착했음
+				break;
+			if (go.isEmpty()) { // 만약 고슴도치 큐가 비었으면 고슴도치 다 사망 
+				System.out.println("KAKTUS");
+				break;
+			}
+			watermove();
+		}
+	}
+
+	private static boolean gomove() {
+		int size = go.size(); //고슴도치 큐 사이즈만큼 반복해서 이동해야함
+		for (int s = 0; s < size; s++) {
+			Node n = go.poll();
+			if(map[n.y][n.x] == '*') // 지금 고슴도치 위치가 물이면 고슴도치 사망
+				continue;
+			for (int i = 0; i < 4; i++) {
+				int ny = n.y + dy[i];
+				int nx = n.x + dx[i];							// 배열 범위 벗어나거나, 돌, 물, 방문한곳이면 패스
+				if(ny < 0 || nx < 0 || ny >=R || nx >= C || map[ny][nx]=='*' || visit[ny][nx] || map[ny][nx]=='X') 
+					continue;
+				if(map[ny][nx] == 'D') { // 비버굴 도착
+					System.out.println(n.cnt+1);
+					return true;
+				}
+				visit[ny][nx] = true;
+				go.offer(new Node(ny,nx,n.cnt+1)); // cnt 값을 증가시켜준다.
+			}
+		}
+		return false;
+	}
+
+	private static void watermove() {
+		int size = water.size();  //물 큐 사이즈만큼 반복해서 이동해야함
+		for (int s = 0; s < size; s++) {
+			Node n = water.poll();
+			for (int i = 0; i < 4; i++) {
+				int ny = n.y + dy[i];
+				int nx = n.x + dx[i];				// 배열 범위 벗어나거나, 물,벽,비버굴이면 패스
+				if(ny < 0 || nx < 0 || ny >=R || nx >= C || map[ny][nx]=='*' || map[ny][nx]=='X' || map[ny][nx] == 'D')
+					continue;
+				map[ny][nx] = '*'; // 물에대한 방문처리하는 부분
+				water.offer(new Node(ny,nx,0));
+			}
+		}
+	}
+
+	static class Node {
+		int y, x, cnt;
+
+		Node(int y, int x, int cnt) {
+			this.y = y;
+			this.x = x;
+			this.cnt = cnt;
+		}
+	}
+}
