@@ -1,0 +1,34 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class Main {
+	
+	static int N, T;
+	static int[] K,S,dp;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		N = Integer.parseInt(st.nextToken());
+		T = Integer.parseInt(st.nextToken());
+		
+		K = new int[N];
+		S = new int[N];
+		dp = new int[T+1];
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			K[i] = Integer.parseInt(st.nextToken());
+			S[i] = Integer.parseInt(st.nextToken());
+		}
+		
+		for (int i = 0; i < N; i++) {
+			for (int j = T; j > 0; j--) { //뒤에서 부터 체크를 해준다
+				if(j - K[i] >= 0) // 현재 시간에서 해당 단원의 공부시간을 뺀게 0보다 크면 공부가능
+					dp[j] = Math.max(dp[j], S[i] + dp[j-K[i]]); // 현재 저장된 값은 첫번째 제외하곤 이전 단원의 최대값이 저장되어있음
+			}                   // 이전 단원최대값과 현재단원을 공부하고 그 공부한시간을 뺀 이전 단원 공부 값 합중 큰값을 저장
+		}
+		System.out.println(dp[T]); // 최대값
+	}
+}
