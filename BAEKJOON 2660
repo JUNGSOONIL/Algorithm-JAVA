@@ -1,0 +1,63 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, max, ans=2500;
+	static int[][] map;
+	static Queue<Integer> q = new LinkedList<Integer>();
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		
+		map = new int[N+1][N+1];
+		for (int i = 1; i <=N; i++) {
+			for (int j = 1; j <=N; j++) {
+				if(i!=j)
+					map[i][j] = ans; // 최대값으로 갱신 50*50
+			}
+		}
+		while(true) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			if(s == -1 && e == -1)
+				break;
+			map[s][e] = map[e][s] = 1; //연결정보 저장
+		}
+		for (int k = 1; k <=N; k++) { // 플로이드 와샬 알고리즘 적용
+			for (int i = 1; i <=N; i++) {
+				if(k==i)
+					continue;
+				for (int j = 1; j <=N; j++) {
+					if(k==i && j==k)
+						continue;
+					map[i][j] = Math.min(map[i][j], map[i][k] + map[k][j]);
+				}
+			}
+		}
+		
+		for (int i = 1; i <=N; i++) { 
+			max = 0;                  
+			for (int j = 1; j <=N; j++) { // 각 행의 최대값 구하기
+				if(max < map[i][j])
+					max = map[i][j];
+			}
+			map[i][0] = max; // 이부분에서 각행의 최대값을 첫번째칸에 저장
+			ans = Math.min(ans, max); // 최대값중 최소값도 저장
+		}
+		
+		for (int i = 1; i <=N; i++) { //각 행의 첫번째칸만 체크하면서 최소값인애들 q에 넣기
+			if(map[i][0] == ans)
+				q.offer(i);
+		}
+		System.out.println(ans+" "+q.size()); 
+		for (int i = 0; i <q.size(); i++) { // 큐사이즈만큼 돌면서 하나씩 빼서 출력
+			System.out.print(q.poll() + " ");
+			i--; // 큐사이즈가 poll때문에 감소하기때문에 i값도 1 감소시켜준다
+		}
+	}
+}
