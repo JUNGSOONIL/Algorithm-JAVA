@@ -1,0 +1,31 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.PriorityQueue;
+
+public class Main {
+	
+	static int N;
+	static PriorityQueue<Integer> big = new PriorityQueue<>(); //오름 차순
+	static PriorityQueue<Integer> small = new PriorityQueue<>((a,b) -> b-a); // 내림 차순
+	
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		N = Integer.parseInt(br.readLine());
+		for (int i = 0; i < N; i++) {
+			int n = Integer.parseInt(br.readLine());
+			if(big.size() == small.size()) // 큐 두개 사이즈가 같으면 일단은 내림차순 큐에 넣는다.
+				small.add(n);
+			else // 큐사이즈가 다르면 오름차순에 넣는다.
+				big.add(n); 
+			if(!small.isEmpty() && !big.isEmpty() && small.peek() > big.peek()) { // 두개의 큐가 안비었고, 내림차순 젤앞이 오름차순 젤 앞보다 크면 두개를 바꿔준다.
+				int b = big.poll();
+				int s = small.poll();
+				big.add(s);
+				small.add(b);
+			}
+			sb.append(small.peek()).append(" "); // 내림 차순 큐에 젤 앞부분을 가져온다.
+		}
+		System.out.println(sb);
+	}
+}
