@@ -1,0 +1,147 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, M, ans, tx, ty, cnt; // ans는 연료량
+	static int[][] map;
+	static boolean[][] visit;
+	static int[] dy = { -1, 0, 0, 1 }, dx = { 0, -1, 1, 0 }; // 상 좌 우 하
+
+	static ArrayList<Node> list = new ArrayList<>(); // 도착 정보 저장
+	static Queue<Node> q;
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		ans = Integer.parseInt(st.nextToken());
+		map = new int[N + 1][N + 1];
+		
+		for (int i = 1; i <= N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 1; j <= N; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+		st = new StringTokenizer(br.readLine());
+		ty = Integer.parseInt(st.nextToken());
+		tx = Integer.parseInt(st.nextToken());
+		for (int i = 2; i < M + 2; i++) { // 벽이 1번이라 2번부터 사람 정보에 대해서 map에 번호를 찍어줬음
+			st = new StringTokenizer(br.readLine());
+			int sy = Integer.parseInt(st.nextToken());
+			int sx = Integer.parseInt(st.nextToken());
+			map[sy][sx] = i;
+			int ey = Integer.parseInt(st.nextToken());
+			int ex = Integer.parseInt(st.nextToken());
+			list.add(new Node(ey,ex,0));  // 나중에 도착정보 가져올때 -2해서 가져와야함
+		}
+		
+		while(true) {
+			Node n = find(); // 가장 가까이 있는 손님을 찾는다. 연료량 계산하고 손님 정보 리턴해줌
+			if(n == null || ans < 0) //손님이 더이상 없거나, 손님을 찾았는데 연료가 부족하면 
+				break;
+
+			if(!move(n)) // 손님을 목적지로 태워준다. 실패하면 멈춤
+				break;
+		
+        }
+		if(cnt != M) // 손님 도착한 수랑 처음 손님수가 다르면 실패
+			System.out.println(-1);
+		else
+			System.out.println(ans);
+	}
+
+	private static boolean move(Node s) {
+		int number = map[s.y][s.x]; // 현재 손님 번호 체크하고
+		Node e = list.get(number-2); // 리스트에 손님 도착정보 넣어줬는데 수 차이가 2있기때문에 -2한값으로 가져옴
+		visit = new boolean[N + 1][N + 1];
+		q = new LinkedList<>();
+		q.offer(new Node(s.y,s.x,0));
+		visit[s.y][s.x] = true;
+		while(!q.isEmpty()) {
+			Node n = q.poll();
+			for (int i = 0; i < 4; i++) {
+				int ny = n.y + dy[i];
+				int nx = n.x + dx[i];
+				if(ny < 1 || nx < 1 || ny > N || nx > N || visit[ny][nx] || map[ny][nx] == 1)
+					continue;
+				if(ny == e.y && nx == e.x) { //택시 출발 위치와 손님 도착위치가 같으면
+					ans -= n.count+1; // 연료 미리 계산
+					if(ans < 0) {
+						return false;
+					}
+					ty = ny;
+					tx = nx; // 택시 이동시킴
+					ans += (n.count+1) * 2; //연료충전
+					map[s.y][s.x] = 0; // 손님 시작위치 삭제
+					cnt++; // 사람 이동 카운트
+					return true;
+				}
+				q.offer(new Node(ny,nx,n.count+1));
+				visit[ny][nx] = true;
+			}
+		}
+		return false;
+	}
+
+	private static Node find() {
+		visit = new boolean[N + 1][N + 1];
+		q = new LinkedList<>();
+		ArrayList<Node> people = new ArrayList<>(); // 최단거리 손님 리스트
+		q.offer(new Node(ty,tx,0));
+		visit[ty][tx] = true;
+		if(map[ty][tx] > 1) {
+			return new Node(ty,tx,0);
+		}
+		boolean check = false; // 이미 최단 거리 손님 찾았는지 체크
+		while(!q.isEmpty()) { 
+			Node n = q.poll();
+			
+			if(map[n.y][n.x] > 1) { // 1보다 크면 해당자리에 손님이있는 경우
+				if(!check) { //손님을 처음 찾았으면 true으로 바꿔주고 
+					check = true;
+					people.add(new Node(n.y,n.x,n.count)); // 손님 리스트에 추가
+				}else {
+					Node p = people.get(0); //리스트에서 첫번째 들어간 손님정보 가져오고
+					if(n.count != p.count) //첫번째 손님과 현재 손님의 이동거리가 다르면
+						break; // 현재 손님은 거리가 더 머니깐 멈춤
+					people.add(new Node(n.y,n.x,n.count));  // 거리가 같으면 손님 리스트에 추가
+				}
+			}
+			
+			for (int i = 0; i < 4; i++) { // bfs돌면서 이동가능한곳 계속 추가
+				int ny = n.y + dy[i];
+				int nx = n.x + dx[i];
+				if(ny < 1 || nx < 1 || ny > N || nx > N || visit[ny][nx] || map[ny][nx] == 1)
+					continue;
+				q.offer(new Node(ny,nx,n.count+1));
+				visit[ny][nx] = true;
+			}
+		}
+		if(people.isEmpty()) { // 손님 리스트가 비었다면 손님이 없는경우
+			return null;
+		}
+         // 람다식을 이용해 행 렬 기준 정렬
+		Collections.sort(people,(a,b) -> a.y == b.y ? a.x - b.x : a.y - b.y);
+		Node p = people.get(0); // 정렬 끝나면 첫번째 손님이 가장 왼쪽위에 있는 경우
+		ans -= p.count; // 연료 미리 계산
+		return p; //손님 정보 리턴
+		
+	}
+
+	static class Node {
+		int y, x, count;
+
+		Node(int y, int x, int count) {
+			this.y = y;
+			this.x = x;
+			this.count = count;
+		}
+	}
+}
