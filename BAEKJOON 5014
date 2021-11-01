@@ -1,0 +1,42 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int F,S,G,U,D;
+	static int[] map;
+	static Queue<Integer> q = new LinkedList<Integer>();
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		F = Integer.parseInt(st.nextToken());
+		S = Integer.parseInt(st.nextToken());
+		G = Integer.parseInt(st.nextToken());
+		U = Integer.parseInt(st.nextToken());
+		D = Integer.parseInt(st.nextToken());
+		
+		map = new int[F+1];
+		map[S] = 1;
+		q.offer(S);
+		while(!q.isEmpty()) {
+			int n = q.poll();
+			int up = n + U; // 현재위치에서 위로 이동
+			int down = n - D; // 현재위치에서 아래로 이동
+			if(up <= F && map[up] == 0) { // 위로 갈수있고 방문안했으면 해당 배열을 이전 출발지값 + 1
+				q.offer(up);
+				map[up] = map[n]+1;
+			}
+			if(down >= 1 && map[down] == 0) { // 아래로 갈수있고 방문안했으면 해당 배열을 이전 출발지값 + 1
+				q.offer(down);
+				map[down] = map[n]+1;
+			}
+		}
+		if(map[G] == 0) // 도착지값이 0 이면 방문 실패
+			System.out.println("use the stairs");
+		else // 시작을 1로 시작했기때문에 1을 빼서 출력해준다.
+			System.out.println(map[G]-1);
+	}
+}
