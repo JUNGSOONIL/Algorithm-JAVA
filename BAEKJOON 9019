@@ -1,0 +1,62 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int A,B;
+	static Queue<Integer> q = new LinkedList<>();
+	static boolean[] visit; //방문 체크 배열
+	static String[] str; //사용한거 저장하는 배열
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		for (int i = 1; i <= T; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			visit = new boolean[10000];
+			str = new String[10000];
+			Arrays.fill(str, ""); // 이걸 안해주면 처음 null값이 들어가있음 ""로 초기화
+			A = Integer.parseInt(st.nextToken());
+			B = Integer.parseInt(st.nextToken());
+			visit[A] = true; //시작값을 방문처리 및 q에 넣고 bfs 돌림
+			q.offer(A);
+			bfs();
+			q.clear(); // 큐에 값이 있는경우도 있으니 초기화해줌
+		}
+	}
+	private static void bfs() {
+		while(!q.isEmpty()) {
+			int n = q.poll();
+			if(n == B) { // 만드려는 값이랑 같으면 사용한거 출력
+				System.out.println(str[n]);
+				return;
+			}
+			int D = n*2%10000;
+			int S = n == 0 ? 9999 : n-1;
+			int L = (n%1000) * 10 + n/1000; // 왼쪽으로 밀기
+			int R = (n%10)*1000 + n/10; // 오른쪽으로 밀기
+			if(!visit[D]) {
+				str[D] = str[n] + "D";
+				visit[D] = true;
+				q.offer(D);
+			}
+			if(!visit[S]) {
+				str[S] = str[n] + "S";
+				visit[S] = true;
+				q.offer(S);
+			}
+			if(!visit[L]) {
+				str[L] = str[n] + "L";
+				visit[L] = true;
+				q.offer(L);
+			}
+			if(!visit[R]) {
+				str[R] = str[n] + "R";
+				visit[R] = true;
+				q.offer(R);
+			}
+		}
+	}
+}
