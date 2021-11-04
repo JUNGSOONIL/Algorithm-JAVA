@@ -1,0 +1,77 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.PriorityQueue;
+import java.util.Stack;
+import java.util.StringTokenizer;
+
+public class Main {
+	
+	static int N, M, A, B;
+	static ArrayList<Node>[] list;
+	static boolean[] visit;
+	static int[] cost, check; //cost는 A에서 해당지점까지 갈수있는 최소값 저장, check는 
+	static PriorityQueue<Node> pq = new PriorityQueue<>((a,b) -> a.value - b.value);
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		M = Integer.parseInt(br.readLine());
+		list = new ArrayList[N+1];
+		visit = new boolean[N+1];
+		cost = new int[N+1];
+		check = new int[N+1];
+		for (int i = 0; i <=N; i++) {
+			list[i] = new ArrayList<>();
+			cost[i] = Integer.MAX_VALUE;
+		}
+		for (int i = 0; i < M; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int e = Integer.parseInt(st.nextToken());
+			int v = Integer.parseInt(st.nextToken());
+			list[s].add(new Node(e,v));
+		}
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		A = Integer.parseInt(st.nextToken());
+		B = Integer.parseInt(st.nextToken());
+		
+		cost[A]= 0;
+		pq.add(new Node(A,0));
+		while(!pq.isEmpty()) { // 다익스트라 진행
+			Node start = pq.poll();
+			if(visit[start.end]) continue;
+			visit[start.end] = true;
+			for (Node end : list[start.end]) {
+				if(end.value + cost[start.end]< cost[end.end]) {
+					cost[end.end] = end.value + cost[start.end];
+					check[end.end] = start.end; // 이동해야하는 곳에 이전 값을 가리키도록 한다.
+					pq.offer(new Node(end.end, cost[end.end]));
+				}
+			}
+		}
+		
+		Stack<Integer> s = new Stack<>();// 역으로 추적하기 떄문에 스택에 넣고 나중에 빼오기
+		int next = B; // 계속 가리키는 값을 갱신할 변수
+		while(true) {
+			s.add(next); 
+			next = check[next];
+			if(next == 0) // 0을 가리키게되면 끝나니깐 종료
+				break;
+		}
+		System.out.println(cost[B]); //비용 출력
+		System.out.println(s.size()); //스택 사이즈 출력
+		for (int i = 0; i < s.size(); i++) { //스택에서 하나씩 뺴면서 출력
+			System.out.print(s.pop()+" ");
+			i--;
+		}
+	}
+	
+	static class Node{
+		int end, value;
+		Node(int end, int value){
+			this.end = end;
+			this.value = value;
+		}
+	}
+}
