@@ -1,0 +1,33 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, M;
+	static int[] arr; // 가지고 있는 카드 저장
+	static HashMap<Integer, Integer> map = new HashMap<>(); //동일카드 몇장 들고있는지 저장
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		N = Integer.parseInt(br.readLine());
+		arr = new int[N];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			int n = Integer.parseInt(st.nextToken());
+			map.put(n, map.getOrDefault(n, 0)+1); //map에 몇장 가지고있는지 저장하는데 이미 값이 있으면 그값에 +1 해줌
+			arr[i] = n;
+		}
+		Arrays.sort(arr);  // 이진 탐색을 위해 배열을 정렬해줌
+		M = Integer.parseInt(br.readLine());
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < M; i++) {
+			int n = Integer.parseInt(st.nextToken());
+			n = Arrays.binarySearch(arr, n) >= 0 ? map.get(n) : 0; // arr에서 해당 값을 이진탐색한게 0보다 크면 있는거임
+			sb.append(n).append(" ");                 //해당값 가지고 있으면 map에서 몇장들고있는지 가져와서 저장
+		}
+		System.out.println(sb);
+	}
+}
