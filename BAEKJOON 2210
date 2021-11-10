@@ -1,0 +1,41 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int[][] map = new int[5][5];
+	static Set<String> set = new HashSet<>(); //중복을 제거하기위해 set에 넣어줌
+	static int[] dy = { -1, 1, 0, 0 }, dx = { 0, 0, -1, 1 }; 
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		for (int i = 0; i < 5; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < 5; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++) {
+				dfs(i, j, 0, "");
+			}
+		}
+		System.out.println(set.size());
+	}
+                           //dfs돌면서 index를 1씩 증가시키고 str에 계속 먹는 값을 넣어준다.
+	private static void dfs(int y, int x, int index, String str) {
+		if (index == 6) {
+			set.add(str); // 여섯칸 방문하면 set에 데이터 넣어줌
+			return;
+		}
+		for (int i = 0; i < 4; i++) {
+			int ny = dy[i] + y;
+			int nx = dx[i] + x;
+			if (ny < 0 || nx < 0 || ny >= 5 || nx >= 5) continue;
+			dfs(ny, nx, index + 1, str+map[y][x]);
+		}
+	}
+}
