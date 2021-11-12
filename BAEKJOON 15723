@@ -1,0 +1,53 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static StringTokenizer st;
+	static int N, M, start, end;
+	static int[][] map = new int[26][26];
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		for (int i = 0; i < 26; i++) {
+			for (int j = 0; j < 26; j++) {
+				if (i != j)
+					map[i][j] = 1000;
+			}
+		}
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			start = st.nextToken().charAt(0) - 'a'; // 해당 데이터를 숫자로 변환
+			st.nextToken(); // is 부분 날려버림
+			end = st.nextToken().charAt(0) - 'a'; // 해당 데이터를 숫자로 변환
+			map[start][end] = 1; 
+		}
+		for (int k = 0; k < 26; k++) { // 플로이드 와샬
+			for (int i = 0; i < 26; i++) {
+				if (i == k)
+					continue;
+				for (int j = 0; j < 26; j++) {
+					if (i == j || k == j)
+						continue;
+					map[i][j] = Math.min(map[i][j], map[i][k] + map[k][j]);
+				}
+			}
+		}
+
+		M = Integer.parseInt(br.readLine());
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			start = st.nextToken().charAt(0) - 'a';
+			st.nextToken();
+			end = st.nextToken().charAt(0) - 'a';
+			if (map[start][end] != 0 && map[start][end] < 1000) // 연결되었다는 소리
+				System.out.println("T");
+			else
+				System.out.println("F");
+		}
+
+	}
+
+}
