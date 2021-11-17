@@ -1,0 +1,55 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int n, m, ans;
+	static boolean[] visit;
+	static ArrayList<Integer>[] list;
+	static Queue<Integer> q = new LinkedList<Integer>();
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		n = Integer.parseInt(br.readLine());
+		m = Integer.parseInt(br.readLine());
+		visit = new boolean[n + 1];
+		list = new ArrayList[n+1];
+		for (int i = 0; i <=n; i++) {
+			list[i] = new ArrayList<>();
+		}
+
+		for (int i = 0; i < m; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			list[s].add(b);
+			list[b].add(s); //양방향
+		}
+		
+		visit[1] = true;
+		for (int i : list[1]) { // 상근이 친구들 다담아주고 카운트해줌
+			if(visit[i]) continue;
+			q.offer(i);
+			visit[i] = true;
+			ans++;
+		}
+
+		while (!q.isEmpty()) { // 상근이 친구의 친구들 찾고 카운트해줌
+			int i = q.poll();
+			for (int j : list[i]) { 
+				{
+					if (visit[j])
+						continue;
+					visit[j] = true;
+					ans++;
+				}
+			}
+
+		}
+		System.out.println(ans); // 최종 카운트값 출력
+	}
+}
