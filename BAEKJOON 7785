@@ -1,0 +1,25 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+
+public class Main {
+
+	static TreeMap<String, Integer> map = new TreeMap<>((a,b) -> b.compareTo(a)); // 역순 출력이라 람다식으로 정렬
+	static int N;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		for (int i = 0; i < N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			String key = st.nextToken(); // 그냥 이름으로만 체크 뒤에 값은 무시
+			if(map.getOrDefault(key, 0) == 0) // 0 이면 해당값은 들어온적이 없음
+				map.put(key, 1);
+			else // 이건 이미 값이 있으니깐 해당 값을 지워줌
+				map.remove(key);
+		}
+		for (String string : map.keySet()) { // 최종 map에 저장된 값 출력
+			System.out.println(string);
+		}
+	}
+}
