@@ -1,0 +1,42 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.StringTokenizer;
+
+public class Main {
+	
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		for (int t = 1; t <=T; t++) {
+			int N = Integer.parseInt(br.readLine());
+			ArrayList<Node> list = new ArrayList<>();
+			for (int i = 0; i < N; i++) {
+				StringTokenizer st = new StringTokenizer(br.readLine());
+				int A = Integer.parseInt(st.nextToken());
+				int B = Integer.parseInt(st.nextToken());
+				list.add(new Node(A,B));
+			}
+			Collections.sort(list, (a,b) -> a.a - b.a); // 먼저 A성적을 기준으로 내림차순 정렬
+			int ans = 1; // A성적 1등은 무조건 합격
+			int min = list.get(0).b; // A성적 1등의 B성적을 최소 초기값으로 지정
+			for (int i = 1; i < N; i++) {
+				int n = list.get(i).b; 
+				if(n < min) { // 이후 B성적이 최소 값보다 작으면 해당인원은 선발 가능 ++해주고 최소값 갱신
+					ans++;
+					min = n;
+				}
+			}
+			System.out.println(ans);
+		}
+	}
+	
+	static class Node{
+		int a,b;
+		Node(int a, int b){
+			this.a = a;
+			this.b =b;
+		}
+	}
+}
