@@ -1,0 +1,48 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		LinkedList<Character> list = new LinkedList<>();
+		ListIterator<Character> iter = list.listIterator();
+		
+		String str = br.readLine();
+		for (int i = 0; i < str.length(); i++) {
+			iter.add(str.charAt(i));
+		}
+		
+		int N = Integer.parseInt(br.readLine());
+		for (int i = 0; i < N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			str = st.nextToken();
+			if(str.equals("L")) {
+				 if(iter.hasPrevious()) // 앞에 데이터가 있으면 ture
+                     iter.previous(); // 위치를 한칸 앞으로 이동 
+			}else if(str.equals("D")) {
+				; if(iter.hasNext())
+                    iter.next();
+			}else if(str.equals("B")) {
+				if(iter.hasPrevious()){ 
+                    iter.previous();
+                    iter.remove();
+                }
+			}else if(str.equals("P")) {
+				char c = st.nextToken().charAt(0);
+				iter.add(c);
+			}
+		}
+		for (Character character : list) {
+			wr.write(character);
+		}
+		 wr.flush();
+	}
+}
