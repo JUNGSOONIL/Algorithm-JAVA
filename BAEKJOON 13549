@@ -1,0 +1,48 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, K;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		bfs();
+	}
+
+	private static void bfs() {
+		boolean[] visit = new boolean[100001];
+		PriorityQueue<Node> pq = new PriorityQueue<Node>((a,b) -> a.cnt - b.cnt);  // 람다 식으로 정렬
+		pq.offer(new Node(0,N));
+		
+		while (!pq.isEmpty()) {
+			Node n = pq.poll();
+			visit[n.value] = true;
+			if (n.value == K) {
+				System.out.println(n.cnt);
+				return;
+			}
+			if (n.value * 2 <= 100000 && !visit[n.value * 2]) {
+				pq.offer(new Node(n.cnt, n.value *2));
+			}
+			if (n.value - 1 >= 0 && !visit[n.value - 1]) {
+				pq.offer(new Node(n.cnt+1, n.value - 1));
+			}
+			if (n.value + 1 <= 100000 && !visit[n.value + 1]) {
+				pq.offer(new Node(n.cnt+1, n.value + 1));
+			}
+		}
+	}
+	static class Node{
+		int cnt, value;
+		Node(int cnt, int value){
+			this.cnt = cnt;
+			this.value = value;
+		}
+	}
+}
