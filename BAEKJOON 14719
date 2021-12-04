@@ -1,0 +1,61 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, M;
+	static int map[][], dy[] = {0,0}, dx[] = {-1,1}; // 좌우만 체크할거라 2개만 사용
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		map = new int[N][M];
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < M; i++) { // 입력받을때 왼쪽 위에부터 아래로 블럭을 채우는 느낌으로 map를 구성한다.
+			int e = Integer.parseInt(st.nextToken());
+			for (int j = 0; j < e; j++) {
+				map[j][i] = 1;
+			}
+		}
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if(map[i][j] == 0) // 해당 자리에 빗물이 차는지 체크
+					check(i,j);
+			}
+		}
+		System.out.println(count()); // 2로 변경된 부분 모드 체크해서 반환
+	}
+
+	private static void check(int y, int x) {
+		int cnt = 0;
+		for (int i = 0; i < 2; i++) {
+			int ny = y;
+			int nx = x;
+			while(true) {
+				ny += dy[i];
+				nx += dx[i];
+				if(ny < 0 || nx < 0 || ny >=N || nx >= M)
+					break;
+				if(map[ny][nx] == 1) { // 쭉 가다가 블럭을 만나면 카운트 증가하고 멈춤 
+					cnt++;
+					break;
+				}
+			}
+		}
+		if(cnt == 2) // 카운트가 2면 양옆에 블럭이 있단소리 빗물이 찰수있으므로 2로 변경
+			map[y][x] = 2;
+	}
+
+	private static int count() {
+		int cnt = 0;
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if(map[i][j] == 2)
+					cnt++;
+			}
+		}
+		return cnt;
+	}
+}
