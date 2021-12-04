@@ -1,0 +1,32 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		int A = Integer.parseInt(st.nextToken());
+		int B = Integer.parseInt(st.nextToken());
+		
+		// 두수중 큰값을 A 작은값을 B에 저장하기 위한 로직
+		int C = Math.max(A, B);
+		B = Math.min(A, B);
+		A = C;
+		
+		
+		System.out.println(gcd(A,B));
+		System.out.println(A*B/gcd(A,B)); // 최소 공배수는 두수 곱한거에 최대 공약수 나누면 됨
+	}
+
+	private static int gcd(int a, int b) {
+		while(b != 0) {
+			int c = a % b; // 큰값에서 작은값을 나눈 나머지를 저장
+			a = b; // a값은 필요 없으므로 b값으로 바꾸고 
+			b = c; // b값에 나눈 나머지를 저장해서 다시 반복
+		}
+		return a; // b가 0이되면 a가 최대 공약수가 된다.
+	}
+}
