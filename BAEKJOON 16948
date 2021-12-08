@@ -1,0 +1,52 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N, sy,sx,ey,ex, map[][], dy[] = {-2,-2,0,0,2,2},dx[] = {-1,1,-2,2,-1,1};
+	static boolean[][] visit;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		map = new int[N][N];
+		visit = new boolean[N][N];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		sy = Integer.parseInt(st.nextToken());
+		sx = Integer.parseInt(st.nextToken());
+		ey = Integer.parseInt(st.nextToken());
+		ex = Integer.parseInt(st.nextToken());
+		bfs();
+	}
+	private static void bfs() {
+		Queue<Node> q = new LinkedList<>();
+		q.offer(new Node(sy,sx,0));
+		visit[sy][sx] = true;
+		while(!q.isEmpty()) {
+			Node n = q.poll();
+			if(n.y == ey && n.x == ex) {
+				System.out.println(n.cnt);
+				return;
+			}
+			for (int i = 0; i < 6; i++) {
+				int ny = n.y + dy[i];
+				int nx = n.x + dx[i];
+				if(ny < 0 || nx < 0 || ny >=N || nx >= N||visit[ny][nx])
+					continue;
+				q.offer(new Node(ny,nx,n.cnt+1));
+				visit[ny][nx] = true;
+			}
+		}
+		System.out.println(-1);
+	}
+	
+	static class Node{
+		int y, x, cnt;
+		Node(int y, int x, int cnt){
+			this.y = y;
+			this.x = x;
+			this.cnt = cnt;
+	  }
+  }
+}
