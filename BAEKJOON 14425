@@ -1,0 +1,26 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int cnt = 0;
+		HashMap<String, Integer> map = new HashMap<>();
+		for (int i = 0; i < N; i++) { // 처음 N개를 입력받아 map에 저장
+			String str = br.readLine(); 
+			map.put(str, 1);
+		}
+		for (int i = 0; i < M; i++) { // map에 존재하는지 체크해서 있으면 cnt 증가
+			String str = br.readLine();
+			if(map.getOrDefault(str, 0) == 1)
+				cnt++;
+		}
+		System.out.println(cnt);
+	}
+}
