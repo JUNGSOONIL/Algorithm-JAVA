@@ -1,0 +1,40 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, max,min, arr[]; // max 큰값, min 작은값 저장
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		arr = new int[N];
+		for (int i = 0; i < N; i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
+		Arrays.sort(arr); // 정렬을 한번 해줌으로써 작은값에서 큰값 순으로 정렬
+		point();
+		System.out.println(min+" "+max);
+	}
+	private static void point() {
+		int start = 0; //앞에 인덱스 저장
+		int end = N-1; //뒤 인덱스 저장
+		int ans = Integer.MAX_VALUE; //여기에 계속 값 저장해서 비교
+		while(end != start) {
+			int sum = arr[start] + arr[end]; 
+			if(Math.abs(sum) < ans) { //절대값을 취해서 비교해줌 그래야 음수 양수 상관없이 비교 가능
+				min = arr[start]; //최솟값 저장
+				max = arr[end]; //최대값 저장
+				ans = Math.abs(sum); 
+				if(ans == 0) // 결과가 0이면 그냥 멈처줌 스페셜 저지기때문에 상관 x
+					return; 
+			}
+			if(sum < 0) // 0보다 작으면 앞을 더해줌
+				start ++;
+			else // 0보다 크면 뒤를 뺴줌
+				end--;
+		}
+	}
+}
