@@ -1,0 +1,63 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, M, A, B, count[];
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		A = Integer.parseInt(st.nextToken());
+		B = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		count = new int[100001];
+		bfs();
+	}
+	private static void bfs() {
+		Queue<Integer> q = new LinkedList<>();
+		q.offer(N);
+		while(!q.isEmpty()){
+			int n = q.poll();
+			if(n == M) {
+				System.out.println(count[M]);
+				return;
+			}
+			if(n-1 >= 0 && count[n-1] == 0 ) {
+				count[n-1] = count[n]+1;
+				q.offer(n-1);
+			}
+			if(n+1 <=100000 && count[n+1] == 0 ) {
+				count[n+1] = count[n]+1;
+				q.offer(n+1);
+			}
+			if(n-A >= 0 && count[n-A] == 0 ) {
+				count[n-A] = count[n]+1;
+				q.offer(n-A);
+			}
+			if(n+A <=100000 && count[n+A] == 0 ) {
+				count[n+A] = count[n]+1;
+				q.offer(n+A);
+			}
+			if(n-B >= 0 && count[n-B] == 0 ) {
+				count[n-B] = count[n]+1;
+				q.offer(n-B);
+			}
+			if(n+B <=100000 && count[n+B] == 0 ) {
+				count[n+B] = count[n]+1;
+				q.offer(n+B);
+			}
+			if(n*A <=100000 && count[n*A] == 0 ) {
+				count[n*A] = count[n]+1;
+				q.offer(n*A);
+			}
+			if(n*B <=100000 && count[n*B] == 0 ) {
+				count[n*B] = count[n]+1;
+				q.offer(n*B);
+			}
+		}
+	}
+}
