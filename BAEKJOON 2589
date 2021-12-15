@@ -1,0 +1,56 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N, M, ans = Integer.MIN_VALUE, dy[] = {-1,1,0,0}, dx[] = {0,0,-1,1};
+	static char[][] map;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		map = new char[N][M];
+		for (int i = 0; i < N; i++) {
+			map[i] = br.readLine().toCharArray(); //문자열로 한줄 입력받은걸 char형으로 하나씩 쪼개서 배열에 저장
+		}
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if(map[i][j] == 'L') // 육지마다 bfs를 돌려서 최대값을 찾아 갱신한다.
+					bfs(i,j);
+			}
+		}
+		System.out.println(ans);
+	}
+	private static void bfs(int y, int x) {
+		boolean[][] visit = new boolean[N][M]; //육지마다 돌리므로 방문배열 계속 초기화
+		Queue<Node> q = new LinkedList<>();
+		visit[y][x] = true; // 시작육지 방문
+		q.add(new Node(y,x,0)); // 시작 육지 0으로 시작해서 bfs 돌림
+		while(!q.isEmpty()) {
+			Node n = q.poll();
+			if(n.cnt > ans) { // 현지점 cnt가 지금까지 갱신한값보다 크면 값 바꿔줌
+				ans = n.cnt;
+			}
+				
+			for (int i = 0; i < 4; i++) { //bfs
+				int ny = n.y + dy[i];
+				int nx = n.x + dx[i];
+				if(ny < 0 || nx < 0 || ny >= N || nx >= M|| visit[ny][nx] || map[ny][nx] == 'W')
+					continue;
+				visit[ny][nx] = true;
+				q.offer(new Node(ny,nx,n.cnt+1));
+			}
+		}
+	}
+	static class Node{
+		int y, x, cnt;
+		Node(int y, int x, int cnt){
+			this.y = y;
+			this.x = x;
+			this.cnt = cnt;
+		}
+	}
+}
