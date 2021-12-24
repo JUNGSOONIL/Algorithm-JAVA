@@ -1,0 +1,26 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Iterator;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		TreeMap<String, Integer> map = new TreeMap<>(); //map를 이용해 입력을 받음
+		for (int i = 0; i < N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine(),"."); //확장자명 .을 기준으로 짜름
+			st.nextToken(); // 처음 파일명은 필요 없어서 버림
+			String str = st.nextToken(); // 확장자명 저장
+			map.put(str, map.getOrDefault(str, 0)+1); // 이미 존재하면 해당값을 가져와서 + 1 한값 저장
+		}
+		Iterator<String> ite = map.keySet().iterator(); //Iterator를 이용해 map값을 출력해줌
+		while(ite.hasNext()) { // 다음 값이 존재하면 true
+			String key = ite.next(); //키 값을 저장
+			int value = map.get(key); //키를 통해 벨류값 저장
+			System.out.println(key +" "+value); 
+		}
+	}
+}
