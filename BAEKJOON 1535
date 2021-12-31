@@ -1,0 +1,32 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N;
+	static int[] health, happy;
+	static int[] dp;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		health = new int[N];
+		happy = new int[N];
+		dp = new int[101]; // dp는 체력만큼 만들어준다.
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			health[i] = Integer.parseInt(st.nextToken());
+		}
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			happy[i] = Integer.parseInt(st.nextToken());
+		}
+		for (int i = 0; i < N; i++) { // 사람들의 수만큼 반복문을 돌면서
+			for (int j = 100; j-health[i] > 0; j--) { // 뒤에서부터 dp를 채워간다. 
+				dp[j] = Math.max(dp[j], happy[i] + dp[j-health[i]]); //현재 위치 값을 비교하는데 현재 위치 값과, 세준이의 체력 - 해당 사람의 체력한 값 + 해당 사람의 기쁨을 비교해서 
+			}체려
+		}
+		System.out.println(dp[100]);
+	}
+}
