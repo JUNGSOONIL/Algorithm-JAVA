@@ -1,0 +1,60 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	
+	static int N, map[][], ans = Integer.MAX_VALUE;
+	static boolean[] visit;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		map = new int[N+1][N+1];
+		visit = new boolean[N+1];
+		for (int i = 1; i <=N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int j = 1; j <=N; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+		subset(1);
+		System.out.println(ans);
+	}
+	private static void subset(int index) {
+		if(index > N) {
+			int Asum = 0, Bsum = 0, Asize = 0, Bsize = 0, Aindex = 0, Bindex =0;
+			for (int i = 1; i <=N; i++) {
+				if(visit[i])
+					Asize++;
+				else
+					Bsize++;
+			}
+			if(Asize < 2 || Bsize< 2)
+				return;
+			int A[] = new int[Asize];
+			int B[] = new int[Bsize];
+			for (int i = 1; i <=N; i++) {
+				if(visit[i])
+					A[Aindex++] = i;
+				else
+					B[Bindex++] = i;
+			}
+			for (int i = 0; i < Asize; i++) {
+				for (int j = 0; j < Asize; j++) {
+					Asum += map[A[i]][A[j]];
+				}
+			}
+			for (int i = 0; i < Bsize; i++) {
+				for (int j = 0; j < Bsize; j++) {
+					Bsum += map[B[i]][B[j]];
+				}
+			}
+			ans = Math.min(ans, Math.abs(Asum - Bsum));
+			return;
+		}
+		visit[index] = true;
+		subset(index + 1);
+		visit[index] = false;
+		subset(index + 1);
+	}
+}
