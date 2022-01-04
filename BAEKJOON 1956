@@ -1,0 +1,50 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int V, E, ans = Integer.MAX_VALUE, map[][], MAX = 4000000; // 마을 최대수 400, 최대거리 10000
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		V = Integer.parseInt(st.nextToken());
+		E = Integer.parseInt(st.nextToken());
+		map = new int[V][V];
+		for (int i = 0; i < V; i++) {
+			for (int j = 0; j < V; j++) {
+				if(i != j)
+					map[i][j] = MAX; // 자기자신 제외 큰값으로 초기화
+			}
+		}
+		for (int i = 0; i < E; i++) {
+			st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken())-1;
+			int e = Integer.parseInt(st.nextToken())-1;
+			int v = Integer.parseInt(st.nextToken());
+			map[s][e] = v;
+		}
+		
+		for (int k = 0; k < V; k++) { // 플로이드 와샬 알고리즘 적용
+			for (int i = 0; i < V; i++) {
+				if(k == i)
+					continue;
+				for (int j = 0; j < V; j++) {
+					if(j == i || k == j)
+						continue;
+					map[i][j] = Math.min(map[i][j], map[i][k] + map[k][j]);
+				}
+			}
+		}
+		
+		for (int i = 0; i < V; i++) {
+			for (int j = 0; j < V; j++) {
+				if(map[i][j] == MAX || map[j][i] == MAX || i == j) // 둘중 하나라도 max면 사이클 생성 실패
+					continue;
+				ans = Math.min(ans, map[i][j] + map[j][i]); // 플로이드 와샬로 이미 다 이어져있으므로 둘의 합만 구하면됨
+			}
+		}
+		ans = ans == Integer.MAX_VALUE ? -1 : ans; //사이클 형성하는지 체크
+		System.out.println(ans);
+	}
+}
