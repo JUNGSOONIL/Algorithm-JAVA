@@ -1,0 +1,87 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int W,H,dy[]= {-1,1,0,0}, dx[] = {0,0,-1,1};
+	static char[][] map;
+	static Queue<Node> fire = new LinkedList<>(); // 불 위치 저장
+	static Queue<Node> sg = new LinkedList<>(); // 상근이 위치 저장
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		for (int t = 1; t <=T; t++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			H = Integer.parseInt(st.nextToken());
+			W = Integer.parseInt(st.nextToken());
+			map = new char[W][H];
+			for (int i = 0; i < W; i++) {
+				map[i] = br.readLine().toCharArray();
+				for (int j = 0; j < H; j++) {
+					if(map[i][j] =='*')
+						fire.offer(new Node(i,j,0));
+					else if(map[i][j] =='@') {
+						sg.offer(new Node(i,j,1)); // 상근이는 시작이 1초로 두었음
+					}
+				}
+			}
+			while(true) {
+				firemove(); // 불을 이동시킴과 동시에 새로 이동된 불을 fire에 담기
+				if (sgmove()) // 상금이 이동시킴과 동시에 새로 이동된 상근이 sg에 담기
+					break; // 만약 true값이 넘어오면 이미 도착한거임
+				if(sg.isEmpty() && fire.isEmpty()) { // 불 && 상근이 큐가 비면 못가는 경우
+					System.out.println("IMPOSSIBLE");
+					break;
+				}
+			}
+			fire.clear(); // 초기화 해주기 why? 아래서 bfs 돌리던중 도착하면 거기서 멈추기 떄문에 데이터가 남아있을수 있음
+			sg.clear();
+		}
+	}
+	private static boolean sgmove() {
+		int size = sg.size(); // 처음 큐에있는만큼만 반복
+		while(size-->0) {
+			Node n = sg.poll();
+			for (int i = 0; i < 4; i++) {
+				int ny = n.y + dy[i];
+				int nx = n.x + dx[i];
+				if(ny < 0 || nx < 0 || ny >= W || nx >= H ) {
+					System.out.println(n.cnt); // 범위를 벗어났으면 도착한거임
+					return true;
+				}
+				if(map[ny][nx] != '.') // .이 아니면 이동 불가
+					continue;
+				sg.offer(new Node(ny,nx,n.cnt+1));
+				map[ny][nx] = '@'; //이동한곳에는 상근이 표시 => 방문여부 체크도 가능
+			}
+		}
+		return false;
+	}
+
+	private static void firemove() {
+		int size = fire.size(); // 처음 큐에있는만큼만 반복
+		while(size-->0) {
+			Node n = fire.poll();
+			for (int i = 0; i < 4; i++) {
+				int ny = n.y + dy[i];
+				int nx = n.x + dx[i];
+				if(ny < 0 || nx < 0 || ny >= W || nx >= H || map[ny][nx] == '#' || map[ny][nx] == '*')
+					continue; //이동하고자 하는 곳이 벽이거나 이미 돌이면 이동 불가, 상근이가 있는곳은 가능
+				fire.offer(new Node(ny,nx,0));
+				map[ny][nx] = '*'; // 이동하면 불을 늘려줌
+			}
+		}
+	}
+
+	static class Node{
+		int y, x, cnt;
+		Node(int y, int x, int cnt){
+			this.y = y;
+			this.x = x;
+			this.cnt = cnt;
+		}
+	}
+}
