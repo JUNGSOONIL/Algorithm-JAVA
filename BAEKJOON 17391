@@ -1,0 +1,60 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, M, map[][], cnt[][], dy[]= {1,0}, dx[]= {0,1}; // 우,하 체크
+	static Queue<Node> q = new LinkedList<>();
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		map = new int[N][M];
+		cnt = new int[N][M]; // 이동 횟수 저장
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < M; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+				cnt[i][j] = Integer.MAX_VALUE; // 최대 값으로 초기화
+			} 
+		}
+		q.offer(new Node(0,0));
+		cnt[0][0] = 0;
+		bfs();
+
+		System.out.println(cnt[N-1][M-1]);
+	}
+	
+	private static void bfs() {
+		while(!q.isEmpty()) {
+			Node n = q.poll();
+			for (int i = 0; i < 2; i++) {
+				int ny = n.y;
+				int nx = n.x;
+				for (int j = 0; j < map[n.y][n.x]; j++) { // 부스터만큼 반복하면서 값을 더함
+					ny = ny + dy[i];
+					nx = nx + dx[i];
+					if(ny<0 || nx<0 || ny >=N || nx >=M ) // 범위 넘어가면 다음값
+						continue;
+					if(cnt[ny][nx] > cnt[n.y][n.x] +1) { // 범위는 안넘어 갔지만 가려는 값보다 현재값 +1이 작으면 
+						cnt[ny][nx] = cnt[n.y][n.x] + 1;
+						q.offer(new Node(ny,nx));
+					}
+				}
+			}
+		}
+		
+	}
+
+	static class Node{
+		int y,x;
+		Node(int y, int x){
+			this.y = y;
+			this.x = x;
+		}
+	}
+}
