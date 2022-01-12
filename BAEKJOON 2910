@@ -1,0 +1,32 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+public class Main {
+	
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int C = Integer.parseInt(st.nextToken());
+		Map<Integer, Integer> map = new LinkedHashMap<>();
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			int n = Integer.parseInt(st.nextToken());
+			map.put(n, map.getOrDefault(n, 0)+1); // 빈도수 저장 존재하면 이미 있는값 +1 아니면 0+1
+		}
+		
+		ArrayList<Integer> list = new ArrayList<>(map.keySet()); // 정렬을 위해 키값을 기준으로 리스트로 만들어줌
+		
+		list.sort((a,b) -> map.get(b)-map.get(a)); // value값에 따라 내림차순 정렬
+		
+		for (int i = 0; i < list.size(); i++) { // list 크기만큼 반복하면서 출력
+			for (int j = 0; j < map.get(list.get(i)); j++) { // 키값에 대응되는 벨류값만큼 반복돌면서
+				System.out.print(list.get(i)+" "); // 키값을 출력
+			}
+		}
+	}
+}
