@@ -1,0 +1,42 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Main {
+
+	static int dir, dy[] = { -1, 0, 1, 0 }, dx[] = { 0, 1, 0, -1 };
+	static int y, x, maxy, maxx, miny, minx;
+	static char[] msg;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+
+		for (int t = 1; t <= T; t++) {
+			dir = x = y = maxy = maxx = miny= minx = 0;
+			msg = br.readLine().toCharArray();
+			turtle();
+		}
+	}
+
+	static void turtle() {
+		for (int i = 0; i < msg.length; i++) {
+			if (msg[i] == 'F') { //직진 현재 방향값으로 +1칸 저장
+				y += dy[dir];
+				x += dx[dir];
+			} else if (msg[i] == 'B') { //후진 현재 방향값으로 -1값 저장
+				y -= dy[dir];
+				x -= dx[dir];
+			} else if (msg[i] == 'R') //우회전 dir+1 해주고 4가 되면 0이 되어야하므로 나머지 연산
+				dir = ++dir % 4;
+			else  // L
+				dir = --dir < 0 ? 3 : dir; //좌회전 dir-1 해주고 삼항연산자를 이용해서 값 저장
+			// 각각 좌표별 max, min값 갱신
+			maxy = Math.max(y, maxy);
+			maxx = Math.max(x, maxx);
+			miny = Math.min(y, miny);
+			minx = Math.min(x, minx);
+		}
+		// 작업 수행 끝나면 각 x,y별 길이를 더하고 곱해줌 => 결과값
+		System.out.println((Math.abs(maxx)+Math.abs(minx)) * (Math.abs(maxy) + Math.abs(miny)));
+	}
+}
