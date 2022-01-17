@@ -1,0 +1,86 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int R, C, dy[]= {-1,1,0,0}, dx[]= {0,0,-1,1}, answ, anss;
+	static char[][] map;
+	static boolean[][] visit;
+	static Queue<Node> sheep = new LinkedList<>(); //양 담는 큐
+	static Queue<Node> wolf = new LinkedList<>(); // 늑대 담는 큐
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		R = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
+		
+		map = new char[R][C];
+		visit = new boolean[R][C];
+		
+		for (int i = 0; i < R; i++) {
+			map[i] = br.readLine().toCharArray();
+		}
+		
+		for (int i = 0; i < R; i++) {
+			for (int j = 0; j < C; j++) {
+				if(map[i][j] != '#' && !visit[i][j]) { //방문안했고 울타리 아니면 방문
+					dfs(i,j); //dfs를 이용해 갈수있는곳 다 탐방하면서 늑대 양 큐에 좌표 담기
+					eat(); // 늑대큐와 양큐 크기비교를 통해 늑대 or 양을 잡아먹음
+				}
+			}
+		}
+		count(); // map를 방문하면서 살아남은 양과 늑대수 체크하고 출력
+	}
+	private static void count() { // map를 탐색하면서 카운트를 샌뒤 출력
+		for (int i = 0; i < R; i++) {
+			for (int j = 0; j < C; j++) {
+				if(map[i][j] == 'v')
+					answ++;
+				else if(map[i][j] == 'o')
+					anss++;
+			}
+		}
+		System.out.println(anss + " "+ answ);
+	}
+	private static void eat() { // 큐 사이즈 비교를 통해 해당 좌표값을 초기화해줌
+		if(wolf.size() >= sheep.size()) {
+			while(!sheep.isEmpty()) {
+				Node n = sheep.poll();
+				map[n.y][n.x] = '.';
+			}
+			wolf.clear();
+		}else {
+			while(!wolf.isEmpty()) {
+				Node n = wolf.poll();
+				map[n.y][n.x] = '.';
+			}
+			sheep.clear();
+		}
+	}
+	private static void dfs(int y, int x) {
+		visit[y][x] = true;
+		if(map[y][x] == 'v') // 현재 map값을 체크해서 양 또는 늑대일수도 있으니 담기
+			wolf.add(new Node(y,x));
+		else if(map[y][x] == 'o')
+			sheep.add(new Node(y,x));
+		for (int i = 0; i < 4; i++) {
+			int ny = y + dy[i];
+			int nx = x + dx[i];
+			if(ny < 0 || nx < 0 || ny >= R || nx >= C || map[ny][nx] == '#' || visit[ny][nx])
+				continue;
+			dfs(ny,nx);
+		}
+	}
+	
+	static class Node{
+		int y, x;
+		Node(int y, int x){
+			this.y = y;
+			this.x = x;
+		}
+	}
+
+}
