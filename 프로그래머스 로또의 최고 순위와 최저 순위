@@ -1,0 +1,19 @@
+import java.util.Arrays;
+
+class Solution {
+    public int[] solution(int[] lottos, int[] win_nums) {
+        int[] answer = new int[2];
+        int max = 0, min = 0;
+        Arrays.sort(win_nums);
+        for (int i = 0; i < 6; i++) {
+			if(lottos[i] == 0) {
+				max++;
+			}else if (Arrays.binarySearch(win_nums, lottos[i]) >= 0)
+				min++;
+		}
+        int[] value = new int[] {6,6,5,4,3,2,1};
+        answer[0] = value[min + max];
+        answer[1] = value[min];
+        return answer;
+    }
+}
