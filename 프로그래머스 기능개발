@@ -1,0 +1,30 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Solution {
+    public int[] solution(int[] progresses, int[] speeds) {
+        int[] days = new int[progresses.length];
+	        Queue<Integer> q = new LinkedList<Integer>();
+	        int day = 0, totalday = 0, index = 0;
+	        for (int i = 0; i < progresses.length; i++) { // 작업 수행 100프로까지 몇일 걸리는지 계산해서 큐에 추가
+				day = 100 - progresses[i]; 
+				q.offer(day%speeds[i] == 0 ? day/speeds[i] : day/speeds[i]+1);
+			}
+	        totalday = q.poll(); // 첫번째 작업 걸린 일수 저장
+	        days[index]++; // 첫번째 작업 배포 완료
+	        while(!q.isEmpty()) { // 큐가 빌때까지 반복
+	        	int n = q.poll(); 
+	        	if(n <= totalday) { // totalday에는 현재까지 총작업일수가 저장되어있음 작으면 이전 작업 배포와 같이 가능
+	        		days[index]++; 
+	        	}else { // 이전 작업 이후에 새로 배포해주어야함
+	        		days[++index]++;
+	        		totalday = n;
+	        	}
+	        }
+	        int[] answer = new int[index+1];
+	        for (int i = 0; i <answer.length; i++) {
+				answer[i] = days[i];
+			}
+	        return answer;
+    }
+}
