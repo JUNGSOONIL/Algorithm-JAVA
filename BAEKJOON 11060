@@ -1,0 +1,52 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, arr[]; // 전체 길이와, 각각의 값을 저장
+	static boolean visit[]; // 방문 체크
+	static Queue<Node> q = new LinkedList<>(); // bfs
+	
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		arr = new int[N];
+		visit = new boolean[N];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
+		q.offer(new Node(0,0)); // 시작위치와, 이동 횟수를 처음에 넣어줌
+		visit[0] = true;
+		bfs();
+	}
+	
+	private static void bfs() {
+		while(!q.isEmpty()) {
+			Node n = q.poll();
+			if(n.x == N-1) { // 현재 큐에서 빼온값이 오른쪽 끝지점인지 체크
+				System.out.println(n.cnt);
+				return;
+			}
+			for (int i = 1; i <= arr[n.x]; i++) { // 반복문을 1~이동할수 있는 위치까지 반복하면서 이동시킴
+				int nx = n.x + i;
+				if(nx >= N || visit[nx]) // 이미 방문했거나 범위 벗어나는 경우
+					continue;
+				q.offer(new Node(nx,n.cnt+1)); // 큐에 이동한 위치와 이동 카운트를 1증가시켜 넣어줌
+				visit[nx] = true;
+			}
+		}
+		System.out.println(-1); // 여기에 왔다면 위에서 리턴하지 못한 경우 즉 오른쪽 끝에 도착하지 못한경우
+	}
+
+	static class Node{ // 현재 위치와, 이동 수를 저장
+		int x, cnt;
+		Node(int x, int cnt){
+			this.x = x;
+			this.cnt = cnt;
+		}
+	}
+}
