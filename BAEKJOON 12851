@@ -1,0 +1,56 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	static int N, K, answer_time, answer_cnt;
+	static boolean[] visit;
+	static Queue<Node> q = new LinkedList<>();
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		visit = new boolean[100001]; // K보다 멀리갔다가 돌아오는 경우도있으므로 100001으로 지정
+		q.offer(new Node(N,0)); // 시작 좌표와 이동횟수를 처음 넣어줌.
+		bfs();
+		System.out.println(answer_time);
+		System.out.println(answer_cnt);
+	}
+	
+	private static void bfs() {
+		while(!q.isEmpty()) {
+			Node n = q.poll();
+			if(answer_time == 0 && n.index == K) //이동 횟수 갱신 안됬고, 동생에게 도착했으면 이동 횟수 갱신
+				answer_time = n.cnt;
+			if(n.index == K && answer_time == n.cnt) // 동생에게 도착했고, 갱신된 이동 횟수와 이동 횟수가 같으면 카운트 증가
+				answer_cnt++;
+			if(answer_time != 0 && answer_time < n.cnt)// 이동 횟수가 갱신되었고, 현재 큐에서 빼낸 이동횟수가 갱신값보다 크면 종료
+				return;
+			visit[n.index] = true; // 큐에 넣을때 방문 체크를 하지않고 여기서해줌 => 큐에서 넣으면서 체크하면 다른 경로로 가야하는 값이 이미 방문처리로 못가도록 되므로
+			int sub = n.index - 1;
+			int add = n.index + 1;
+			int mul = n.index * 2;
+			if(sub >= 0 && !visit[sub]) {
+				q.offer(new Node(sub, n.cnt + 1));
+			}
+			if(add <= 100000 && !visit[add]) {
+				q.offer(new Node(add, n.cnt + 1));
+			}
+			if(mul <= 100000 && !visit[mul]) {
+				q.offer(new Node(mul, n.cnt + 1));
+			}
+		}
+	}
+	
+	static class Node{
+		int index, cnt;
+		Node(int index, int cnt){
+			this.index = index;
+			this.cnt = cnt;
+		}
+	}
+}
