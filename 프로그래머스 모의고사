@@ -1,0 +1,35 @@
+import java.util.Arrays;
+
+class Solution {
+        public int[] solution(int[] answers) { // 반복된 숫자를 입력해줌
+        int[] arr_a = new int[] {1,2,3,4,5};
+        int[] arr_b = new int[] {2,1,2,3,2,4,2,5};
+        int[] arr_c = new int[] {3,3,1,1,2,2,4,4,5,5};
+        int a = 0, b =0 , c=0, cnt_a=0, cnt_b=0, cnt_c = 0;
+        for (int i = 0; i < answers.length; i++) { // 전체 배열만큼 체크
+			a = a == 5 ? 0 : a; // 각각 배열 범위 벗어나면 다시 인덱스를 0으로 바꿈
+			b = b == 8 ? 0 : b;
+			c = c == 10 ? 0 : c;
+			if(answers[i] == arr_a[a++]) //답이 같을때마다 각각 카운트를 증가시킴
+				cnt_a++;
+			if(answers[i] == arr_b[b++])
+				cnt_b++;
+			if(answers[i] == arr_c[c++])
+				cnt_c++;
+		}
+        int max = Math.max(Math.max(cnt_a, cnt_b), cnt_c); // 3명중 젤 많이 맞춘값 갱신
+        int cnt = 0; // 여기는 이제 max값과 같은 사람수 저장
+        cnt += cnt_a == max ? 1 : 0;
+        cnt += cnt_b == max ? 1 : 0;
+        cnt += cnt_c == max ? 1 : 0;
+        int[] answer = new int[cnt];
+        int index = 0;
+        if(max == cnt_a)
+        	answer[index++] = 1;
+        if(max == cnt_b)
+        	answer[index++] = 2;
+        if(max == cnt_c)
+        	answer[index++] = 3;
+        return answer;
+    }
+}
