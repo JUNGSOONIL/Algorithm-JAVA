@@ -1,0 +1,39 @@
+class Solution {
+    static int[] number; // 연결 정보 배열
+
+	public static int solution(int n, int[][] computers) {
+		int answer = 0;
+		number = new int[n + 1]; 
+		for (int i = 1; i <= n; i++) { // 처음에는 자기 자신을 루트로 가르킴
+			number[i] = i;
+		}
+
+		for (int i = 0; i < n; i++) { // 반복문을 돌면서 연결되어있고, 자기 자신이 아니고 루트가 다른경우 둘을 nuion
+			for (int j = 0; j < n; j++) {
+				if (computers[i][j] == 1 && i != j && find(i + 1) != find(j + 1))
+					union(i + 1, j + 1);
+			}
+		}
+		for (int i = 1; i <= n; i++) { // 모두 union 끝나면 자기 자신을 가리키는 곳이 그룹의 대빵이므로 갯수를 카운트함
+			if (number[i] == i) {
+				answer++;
+			}
+		}
+		return answer;
+	}
+
+	public static int find(int a) {
+		if (a == number[a])
+			return a;
+		return number[a] = find(number[a]);
+	}
+
+	public static void union(int a, int b) {
+		a = find(a);
+		b = find(b);
+		if (a < b)
+			number[b] = a;
+		else
+			number[a] = b;
+	}
+}
