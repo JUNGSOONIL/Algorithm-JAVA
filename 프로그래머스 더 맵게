@@ -1,0 +1,24 @@
+import java.util.PriorityQueue;
+
+class Solution {
+    public static int solution(int[] scoville, int K) {
+        int answer = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> a - b); // 우선순위큐를 사용 람다식이용 오름차순 정렬
+        for (int i = 0; i < scoville.length; i++) {
+			pq.add(scoville[i]); // 스코빌 지수를 우선순위큐에 담는다.
+		}
+        while(true && !pq.isEmpty()) { // 무한루프
+        	int a = pq.poll(); // 젤작은 값을 뺸다
+        	if(a < K) { // 값을 비교한다
+        		answer++; // 연산 횟수 증가
+        		int b = pq.poll();
+        		pq.add(a+b*2); // 연산해서 다시 우선순위큐에 넣는다
+        	}else // K값보다 같거나 크면 반복문 빠져나옴
+        		break;
+        	if(pq.size() == 1 && pq.peek() < K) { // 만약 지금 큐에 값이 하나만있고 그 값이 K보다 작으면 불가능 -1 리턴
+        		return -1;
+        	}
+        }
+        return answer;
+    }
+}
