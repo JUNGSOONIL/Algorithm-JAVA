@@ -1,0 +1,47 @@
+import java.util.HashSet;
+import java.util.Set;
+
+class Solution {
+   static String out = ""; // 숫자 만든거 저장
+	static boolean[] select; 
+	static Set<Integer> set = new HashSet<>();
+	public static int solution(String numbers) {
+		int answer = 0;
+		select = new boolean[numbers.length()];
+		for (int i = 0; i < select.length; i++) { // 1부터 원하는 길이만큼 숫자를 만듬
+			perm(0,numbers,i+1);
+		}
+		for (Integer n : set) { // 소수 체크하는 부분
+			if(check(n))
+				answer++;
+		}
+		return answer;
+	}
+
+	private static boolean check(Integer n) {
+		if(n == 0 || n == 1) // 0이나 1은 소수가 아니니깐 실패
+			return false;
+		for (int i = 2; i <= Math.sqrt(n); i++) { // 나머지 애들은 제곱근까지만 반복하면서 나눠줌 (소수 찾기 방법
+			if(n%i == 0)
+				return false;
+		}
+		return true;
+	}
+
+	private static void perm(int index, String str, int len) {
+		if(index == len) { // 원하는 길이가 될때마다 set에 저장
+			set.add(Integer.parseInt(out));
+			return;
+		}
+			
+		for (int i = 0; i < select.length; i++) {
+			if (select[i]) // 이미 해당숫자 사용했으면
+				continue;
+			out += str.charAt(i); //해당 숫자를 추가시켜줌
+			select[i] = true;
+			perm(index + 1,str,len);
+			select[i] = false;
+			out = out.substring(0,out.length()-1); // 마지막에 추가한 숫자를 뺴준다.
+		}
+	}
+}
