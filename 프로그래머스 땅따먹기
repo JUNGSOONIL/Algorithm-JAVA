@@ -1,0 +1,22 @@
+class Solution {
+static int solution(int[][] land) {
+		int answer = 0;
+		int[][] dp = new int[land.length][land[0].length];
+		
+		dp[0] = land[0]; // 첫번째 행은 입력데이터를 그대로 가져옴
+		for (int i = 1; i < dp.length; i++) { // 이후부터는 이전행 데이터들과 자기 자신의 숫자를 더한값중 최대값을 저장 
+			for (int j = 0; j < dp[0].length; j++) {
+				for (int k = 0; k < dp[0].length; k++) {
+					if(j == k) // 같은 열일경우 다음으로
+						continue;
+					dp[i][j] = Math.max(land[i][j] + dp[i-1][k], dp[i][j]);
+				}
+			}
+		}
+		for (int i = 0; i < dp[0].length; i++) { // 마지막 행에서 최대값을 찾아서 저장
+			answer = Math.max(answer, dp[dp.length-1][i]);
+		}
+		
+		return answer;
+	}
+}
