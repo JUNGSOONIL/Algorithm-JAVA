@@ -1,0 +1,51 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Solution {
+	public static int solution(int n, int[][] edge) {
+		int answer = 0;
+		answer = dfs(n, edge);
+		return answer;
+	}
+
+private static int dfs(int n, int[][] edge) {
+		ArrayList<ArrayList<Node>> list = new ArrayList<>(); // 엣지 정보를 리스트 배열로 관리
+		for (int i = 0; i <= n; i++) { // 리스트 배열 초기화
+			list.add(new ArrayList<>());
+		}
+		for (int i = 0; i < edge.length; i++) { // 양방향이기때문에 각각 추가해줌 1번어레이에는 1에갈수있는 모든 정보 담김 ...
+			list.get(edge[i][0]).add(new Node(edge[i][0], edge[i][1]));
+			list.get(edge[i][1]).add(new Node(edge[i][1], edge[i][0]));
+		}
+		Queue<Node> q = new LinkedList<>();
+		int[] visit = new int[n+1]; // 여기 노드별 도착 횟수 저장, 방문 체크
+		q.addAll(list.get(1)); // 1번 노드 정보를 모두 큐에 담음
+		while(!q.isEmpty()) {
+			Node node = q.poll(); // 큐에서 하나씩 빼낸다
+			if(visit[node.x] != 0) // 만약 0이 아니면 이미 방문했음
+				continue;
+			visit[node.x] = visit[node.y] + 1; // 새로 도착했으니 시작 노드이동횟수에 +1을 도착노드 배열에 저장
+			q.addAll(list.get(node.x)); // 도착노드로부터 갈수있는곳 큐에다 추가
+		}
+		visit[1] = 0; // 자기 자신은 다시 초기화해줌
+		Arrays.sort(visit); // 배열을 정렬해서 가장 큰값이 뒤로가도록함
+		int cnt = 0, max = visit[n]; //마지막 값은 젤 큰값이므로 저장해서 비교
+		for (int i = n; i >= 1; i--) { // 뒤에서부터 반복하면서 max랑 같으면 카운트 추가 다르면 거기서 종료
+			if(visit[i] == max)
+				cnt++;
+			else
+				break;
+		}
+		return cnt; //최종 카운트 리턴
+	}
+
+	static class Node {
+		int y, x;
+		Node(int y, int x) {
+			this.y = y;
+			this.x = x;
+		}
+	}
+}
