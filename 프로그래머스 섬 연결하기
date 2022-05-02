@@ -1,0 +1,38 @@
+import java.util.Arrays;
+
+class Solution {
+	static int[] number;
+	public static int solution(int n, int[][] costs) {
+		int answer = 0;
+		Arrays.sort(costs,(a,b) -> a[2] - b[2]); // 배열을 비용이 작은순서로 정렬 람다식
+		number = new int[n];
+		for (int i = 0; i < n; i++) { 
+			number[i] = i;
+		}
+		int cnt = 0;
+		for (int i = 0; i < costs.length; i++) {
+			if(find(costs[i][0]) == find(costs[i][1])) // 같으면 이미 연결된 상태
+				continue;
+			union(costs[i][0],costs[i][1]); // 연결시켜주고
+			answer+= costs[i][2]; // 비용을 추가해줌
+			if(++cnt == n-1) // 연결한 갯수가 n-1개이면 모든 섬을 연결한 상태
+				break;
+		}
+		return answer;
+	}
+	
+	static int find(int a) {
+		if(a == number[a])
+			return a;
+		return number[a] = find(number[a]);
+	}
+	
+	static void union(int a, int b) {
+		a = find(a);
+		b = find(b);
+		if(a < b)
+			number[b] = a;
+		else
+			number[a] = b;
+	}
+}
