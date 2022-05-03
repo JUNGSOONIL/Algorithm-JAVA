@@ -1,0 +1,18 @@
+class Solution {
+	static int answer;
+    public static int solution(int[] numbers, int target) {
+        dfs(0,0,numbers,target); // 깊이, 합, numbers, target
+        return answer;
+    }
+
+	private static void dfs(int index,int sum, int[] n, int t) { 
+		if(index == n.length) { // 깊이랑 입력 numbers 길이가 같으면 sum과 target이 같은지 비교하고 카운트를 증가시키고 리턴한다
+			if(sum == t)
+				answer++;
+			return;
+		}
+		dfs(index+1,sum+n[index], n, t); // +하는 경우
+		dfs(index+1,sum-n[index], n, t); // -하는 경우
+	}
+
+}
