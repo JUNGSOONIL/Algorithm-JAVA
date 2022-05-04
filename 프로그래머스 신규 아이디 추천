@@ -1,0 +1,85 @@
+class Solution {
+    public static String solution(String new_id) {  
+        new_id = step1(new_id);
+        new_id = step2(new_id);
+        new_id = step3(new_id);
+        new_id = step4(new_id);
+        new_id = step5(new_id);
+        new_id = step6(new_id);
+        new_id = step4(new_id);
+        new_id = step7(new_id);
+        String answer = new_id;
+        return answer;
+    }
+
+	private static String step1(String new_id) { // 대문자를 소문자로 변환
+		char[] c = new_id.toCharArray();
+		String str = "";
+		for (int i = 0; i < c.length; i++) {
+			if(c[i] >='A' && c[i] <= 'Z') {
+				c[i] = (char) (c[i]+32);
+			}
+			str+=c[i];
+		}
+		return str;
+	}
+	private static String step2(String new_id) { // 소문자, 숫자 - _ . 제외 모두 제거
+		char[] c = new_id.toCharArray();
+		String str = "";
+		for (int i = 0; i < new_id.length(); i++) {
+			if(!(c[i] >='a' && c[i] <= 'z' || c[i] >='0' && c[i] <= '9' || c[i] =='-' || c[i] == '_'|| c[i] == '.')) {
+				c[i] = ' '; 
+			}
+			if(c[i] != ' ')
+				str+=c[i];
+		}
+		return str;
+	}
+	private static String step3(String new_id) { // .가 2개이상인거 하나로 변경
+		char[] c = new_id.toCharArray();
+		String str = "";
+		char preStr = ' ';
+		for (int i = 0; i < c.length; i++) {
+			if(i == 0) {
+				preStr = c[0];
+				str+=c[0];
+				continue;
+			}
+			if(c[i] == '.' && preStr == '.') {
+				continue;
+			}
+			preStr = c[i];
+			str+=c[i];
+		}
+		return str;
+	}
+	private static String step4(String new_id) { // 문자 젤앞 뒤가 . 이면 제거
+		char[] c = new_id.toCharArray();
+		String str = "";
+		for (int i = 0; i < c.length; i++) {
+			if(i == 0 || i == c.length-1)
+				if(c[i] == '.')
+					continue;
+			str+=c[i];
+		}
+		return str;
+	}
+	private static String step5(String new_id) { // 빈문자열이면 a 추가
+		if("".equals(new_id))
+			return "a";
+		return new_id;
+	}
+	private static String step6(String new_id) { // 문자열 길이가 15보다 길면 짜름
+		if(new_id.length() > 15) {
+			new_id = new_id.substring(0, 15);
+		}
+		return new_id;
+	}
+	private static String step7(String new_id) { // 문자열 길이가 2 이하이면 마지막 문자열을 추가해줌 
+		while(new_id.length() <= 2) {
+			String s = new_id.substring(new_id.length()-1);
+			new_id += s;
+		}
+		return new_id;
+	}
+}
