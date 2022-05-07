@@ -1,0 +1,34 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+  public static int solution(String s) {
+        int answer = 0;
+        char[] c = s.toCharArray();
+        String str = "", word = "";
+        Map<String, Integer> map = new HashMap<>();
+        map.put("zero", 0);
+        map.put("one", 1);
+        map.put("two", 2);
+        map.put("three", 3);
+        map.put("four", 4);
+        map.put("five", 5);
+        map.put("six", 6);
+        map.put("seven", 7);
+        map.put("eight", 8);
+        map.put("nine", 9);
+        for (int i = 0; i < c.length; i++) {
+			if(c[i] >= '0' && c[i] <= '9')
+				str+= c[i];
+			else {
+				word += c[i];
+				if(map.get(word) != null) {
+					str+=map.get(word);
+					word = "";
+				}
+			}
+		}
+        answer = Integer.parseInt(str);
+        return answer;
+    }
+}
