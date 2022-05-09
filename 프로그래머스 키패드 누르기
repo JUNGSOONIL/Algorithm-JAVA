@@ -1,0 +1,62 @@
+import java.util.*;
+
+class Solution {
+    public static String solution(int[] numbers, String hand) {
+        String answer = "";
+        Map<Integer, Node> map = new HashMap<>(); // map에 키패드별 좌표를 넣는다 시작점은 x
+        map.put(1, new Node(0,0));
+        map.put(2, new Node(0,1));
+        map.put(3, new Node(0,2));
+        map.put(4, new Node(1,0));
+        map.put(5, new Node(1,1));
+        map.put(6, new Node(1,2));
+        map.put(7, new Node(2,0));
+        map.put(8, new Node(2,1));
+        map.put(9, new Node(2,2));
+        map.put(0, new Node(3,1));
+        int ly = 3, lx = 0, ry = 3, rx = 2; // 왼손 오른손 시작 좌표 갱신
+        for (int i = 0; i < numbers.length; i++) {
+        	Node n = map.get(numbers[i]);
+			if(numbers[i] == 1 || numbers[i] == 4 || numbers[i] == 7 ) { // 왼쪽 라인
+				ly = n.y;
+				lx = n.x;
+				answer+= "L";
+			}else if(numbers[i] == 3 || numbers[i] == 6 || numbers[i] == 9 ) { // 오른쪽 라인
+				ry = n.y;
+				rx = n.x;
+				answer+= "R";
+			}else { // 중간라인
+				int left = Math.abs(n.y - ly) + Math.abs(n.x - lx);
+				int right = Math.abs(n.y - ry) + Math.abs(n.x - rx);
+				if(left < right ) { // 왼쪽이 가까움
+					ly = n.y;
+					lx = n.x;
+					answer+= "L";
+				}else if(left > right  ) { // 오른쪽이 가까움
+					ry = n.y;
+					rx = n.x;
+					answer+= "R";
+				}else { // 거리가 같음
+					if("left".equals(hand)) { // 왼손잡이
+						ly = n.y;
+						lx = n.x;
+						answer+= "L";
+					}else { // 오른손잡이
+						ry = n.y;
+						rx = n.x;
+						answer+= "R";
+					}
+				}
+			}
+		}
+        return answer;
+    }
+    
+    static class Node{
+    	int y, x;
+    	Node(int y, int x){
+    		this.y = y;
+    		this.x = x;
+    	}
+    }
+}
