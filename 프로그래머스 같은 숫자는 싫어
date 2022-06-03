@@ -1,0 +1,20 @@
+import java.util.*;
+
+public class Solution {
+    public static int[] solution(int []arr) {
+        Stack<Integer> s = new Stack<>();
+        for (int i = 0; i < arr.length; i++) {
+			if(s.isEmpty()) // 스택이 비었으면 바로 푸쉬한다
+				s.push(arr[i]);
+			else {
+				if(s.peek() != arr[i]) // 스택에 값이있으면 현재값과 비교해서 다르면 푸시함
+					s.push(arr[i]);
+			}
+		}
+        int[] answer = new int[s.size()];
+        for (int i = s.size()-1; i >= 0; i--) { // 배열을 끝에서 부터 스택에서 빼내서 넣어줌
+			answer[i] = s.pop();
+		}
+        return answer;
+    }
+}
