@@ -1,0 +1,21 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Main {
+
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
+		char[] str = br.readLine().toCharArray(); // 입력값을 char 배열로 변환
+		Set<String> set = new HashSet<>(); // set 으로 죽복 제거
+		for (int i = 0; i < str.length; i++) { // 2중 포문을 이용해 모든 경우의수 체크
+			String s = "";
+			for (int j = i; j < str.length; j++) { //시작점부터 끝점까지 반복문을 돌면서 문자열을 더할때마다 set에 추가
+				s+= str[j];
+				set.add(s);
+			}
+		}
+		System.out.println(set.size());
+	}
+}
