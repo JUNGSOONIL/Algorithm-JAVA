@@ -1,10 +1,8 @@
-package BJ;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class BJ3187양치기꿍 {
+public class Main {
 
 	static int R, C, ans_K, ans_V,  k, v, dy[]= {1,-1,0,0}, dx[]= {0,0,-1,1};
 	static char[][] map;
