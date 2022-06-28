@@ -21,12 +21,12 @@ public class Main {
 			for (int j = 0; j < M; j++) {
 				map[i][j] = Integer.parseInt(st.nextToken());
 				if (map[i][j] != 0 && map[i][j] != 6) 
-					list.add(new Node(map[i][j], i, j)); // 리스트에 ccty 위치와 종류를 담는
+					list.add(new Node(map[i][j], i, j)); // 리스트에 cctv 위치와 종류를 담는
 			}
 		}
 		
 		out = new int[list.size()];
-		perm(0); //먼저 순열을 통해 ccty의 경우의수를 체크한다.
+		perm(0); //먼저 순열을 통해 cctv의 경우의수를 체크한다.
 		
 		ans = ans == Integer.MAX_VALUE ? 0 : ans;
 		System.out.println(ans);
@@ -52,7 +52,7 @@ public class Main {
 			}
 		} 
 		
-		for (int i = 0; i < list.size(); i++) { // ccty종를 확인하여 감시구역을 체크한다.
+		for (int i = 0; i < list.size(); i++) { // cctv종류를 확인하여 감시구역을 체크한다.
 			Node n = list.get(i);
 			if(n.n == 1) {
 				check(n,out[i]);
@@ -88,7 +88,7 @@ public class Main {
 		return count;
 	}
 
-	private static void check(Node n, int i) { //i방향으로 ccty감시 구역을 표시한다.
+	private static void check(Node n, int i) { //i방향으로 cctv 감시 구역을 표시한다.
 		int ny = n.y;
 		int nx = n.x;
 		while(true) {
