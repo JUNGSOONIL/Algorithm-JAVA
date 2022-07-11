@@ -24,7 +24,9 @@ public class Main {
 				for (int j = 0; j < 6; j++) {
 					if (map[i][j] != '.') {
 						int d = map[i][j] == 'R' ? 0 : map[i][j] == 'G' ? 1 : 2;
-						dfs(i, j, map[i][j], d);
+						if(visit[i][j][d]) // 이미 방문한적 있으면 다음 반복문 진행
+                            				continue;
+                        			dfs(i, j, map[i][j], d);
 						if (q.size() >= 4) // 큐의 사이즈가 4 이상이면 4개이상 모인경우 연쇄 시킴 
 							bomd();
 						else // 4 보다 작으면 연쇄 불가능 큐를 초기화해줌 
