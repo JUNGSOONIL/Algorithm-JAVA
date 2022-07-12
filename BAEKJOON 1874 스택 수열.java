@@ -19,7 +19,7 @@ public class Main {
 		int index = 0, number = 1;
 		
 		
-		while(index < number) {
+		while(true) {
 			stack.push(number++); // 숫자를 1~n 까지 푸시해줌 
 			sb.append("+").append("\n"); // 푸시했으니 표시 
 			while(!stack.isEmpty() && arr[index] == stack.peek()) { // 스택이 안비어있고 스택에 뺴올값과 배열에 인덱스 값이 같으면 계속 반복  
