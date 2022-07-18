@@ -15,7 +15,7 @@ public class Main {
 
         for (int i = 2; i <= N; i++) { // 두자리수부터 갱신을 해준다.
             for (int j = 0; j < 10; j++) {
-                for (int k = 9; k >= j; k--) { // i 는 자리수 j 는 시작하는 수
+                for (int k = j; k < 10; k++) { // i 는 자리수 j 는 시작하는 수
                     dp[i][j] += dp[i-1][k];
                     dp[i][j] %= 10007;
                 }
