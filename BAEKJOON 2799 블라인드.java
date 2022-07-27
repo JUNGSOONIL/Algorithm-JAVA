@@ -18,7 +18,7 @@ public class Main {
         for (int i = 1; i <= N*5; i = i + 5) {
             for (int j = 1; j <= M*5 ; j = j + 5) {
                 int cnt = 0;
-                for (int k = 0; k < 5; k++) {
+                for (int k = 0; k < 4; k++) {
                     if(map[i+k][j] =='*')
                         cnt++;
                     else
